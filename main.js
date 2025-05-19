@@ -1,5 +1,6 @@
 "use strict";
 
+//import { z } from "zod";
 /*
  * Created with @iobroker/create-adapter v2.6.5
  */
@@ -7,7 +8,8 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
-
+const ExpressMCPServer = require("./lib/mcp-server.js").ExpressMCPServer;
+const server = null;
 // Load your modules here, e.g.:
 // const fs = require("fs");
 
@@ -22,69 +24,47 @@ class McpServer extends utils.Adapter {
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
-		// this.on("objectChange", this.onObjectChange.bind(this));
+		this.on("objectChange", this.onObjectChange.bind(this));
 		// this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
+		this.server = null;
 	}
-
+	async listObjectsWithSettings(cb) {
+		const objects = await this.getForeignObjectsAsync("*", "state");
+		for (const id in objects) {
+			const obj = objects[id];
+			if (
+				obj.common &&
+				obj.common.custom &&
+				obj.common.custom[this.namespace] &&
+				obj.common.custom[this.namespace].enabled == true
+			) {
+				cb(id, obj.common.custom[this.namespace]);
+			}
+		}
+	}
 	/**
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-		// Initialize your adapter here
-
 		// Reset the connection indicator during startup
 		this.setState("info.connection", false, true);
 
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
-		this.log.info("config option1: " + this.config.option1);
-		this.log.info("config option2: " + this.config.option2);
+		this.log.info("config api_key: " + this.config.api_key);
+		this.log.info("config port: " + this.config.port);
 
-		/*
-		For every state in the system there has to be also an object of type state
-		Here a simple template for a boolean variable named "testVariable"
-		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
-		await this.setObjectNotExistsAsync("testVariable", {
-			type: "state",
-			common: {
-				name: "testVariable",
-				type: "boolean",
-				role: "indicator",
-				read: true,
-				write: true,
-			},
-			native: {},
+		this.subscribeObjects(`system.adapter.${this.namespace}`);
+
+		this.subscribeForeignObjects("*");
+
+		this.server = new ExpressMCPServer({ adapter: this });
+		this.listObjectsWithSettings((id, obj) => {
+			this.server.addtool(id, obj);
 		});
 
-		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-		this.subscribeStates("testVariable");
-		// You can also add a subscription for multiple states. The following line watches all states starting with "lights."
-		// this.subscribeStates("lights.*");
-		// Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
-		// this.subscribeStates("*");
-
-		/*
-			setState examples
-			you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-		*/
-		// the variable testVariable is set to true as command (ack=false)
-		await this.setStateAsync("testVariable", true);
-
-		// same thing, but the value is flagged "ack"
-		// ack should be always set to true if the value is received from or acknowledged from the target system
-		await this.setStateAsync("testVariable", { val: true, ack: true });
-
-		// same thing, but the state is deleted after 30s (getState will return null afterwards)
-		await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
-
-		// examples for the checkPassword/checkGroup functions
-		let result = await this.checkPasswordAsync("admin", "iobroker");
-		this.log.info("check user admin pw iobroker: " + result);
-
-		result = await this.checkGroupAsync("admin", "admin");
-		this.log.info("check group user admin group admin: " + result);
+		this.server.start();
 	}
 
 	/**
@@ -112,15 +92,28 @@ class McpServer extends utils.Adapter {
 	//  * @param {string} id
 	//  * @param {ioBroker.Object | null | undefined} obj
 	//  */
-	// onObjectChange(id, obj) {
-	// 	if (obj) {
-	// 		// The object was changed
-	// 		this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
-	// 	} else {
-	// 		// The object was deleted
-	// 		this.log.info(`object ${id} deleted`);
-	// 	}
-	// }
+	onObjectChange(id, obj) {
+		if (obj) {
+			// The object was changed
+			if (obj.common && obj.common.custom && obj.common.custom[this.namespace]) {
+				console.log("object added");
+			} else {
+				if (this.server.tools[id]) {
+					this.server.removetool(id);
+				}
+			}
+			//this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
+		} else {
+			// The object was deleted
+			if (this.server.tools[id]) {
+				this.server.removetool(id);
+			}
+			this.log.info(`object ${id} deleted`);
+		}
+		this.listObjectsWithSettings((id, obj) => {
+			console.log(id, obj);
+		});
+	}
 
 	/**
 	 * Is called if a subscribed state changes

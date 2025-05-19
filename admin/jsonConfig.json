@@ -2,15 +2,16 @@
 	"i18n": true,
 	"type": "panel",
 	"items": {
-		"option1": {
-			"type": "checkbox",
-			"label": "option1",
+		"api_key": {
+			"type": "text",
+			"label": "API-Key",
 			"newLine": true
 		},
-		"option2": {
+		"port": {
 			"type": "text",
-			"label": "option2",
-			"newLine": true
+			"label": "Port",
+			"newLine": true,
+			"default": "4141"
 		}
 	}
 }
