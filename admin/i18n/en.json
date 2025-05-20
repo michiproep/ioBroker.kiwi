@@ -1,5 +1,6 @@
 {
 	"mcp-server adapter settings": "Adapter settings for mcp-server",
 	"option1": "option1",
-	"option2": "option2"
+	"option2": "option2",
+	"description": "Description"
 }

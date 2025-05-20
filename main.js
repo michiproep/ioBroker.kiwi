@@ -39,7 +39,7 @@ class McpServer extends utils.Adapter {
 				obj.common.custom[this.namespace] &&
 				obj.common.custom[this.namespace].enabled == true
 			) {
-				cb(id, obj.common.custom[this.namespace]);
+				cb(id, obj.common);
 			}
 		}
 	}

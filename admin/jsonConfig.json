@@ -2,11 +2,6 @@
 	"i18n": true,
 	"type": "panel",
 	"items": {
-		"api_key": {
-			"type": "text",
-			"label": "API-Key",
-			"newLine": true
-		},
 		"port": {
 			"type": "text",
 			"label": "Port",
