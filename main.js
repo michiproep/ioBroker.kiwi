@@ -28,6 +28,7 @@ class McpServer extends utils.Adapter {
 		// this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
 		this.server = null;
+		this.autodetectedDevices = {};
 	}
 	async listObjectsWithSettings(cb) {
 		const objects = await this.getForeignObjectsAsync("*", "state");
@@ -47,24 +48,47 @@ class McpServer extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-		// Reset the connection indicator during startup
-		this.setState("info.connection", false, true);
-
-		// The adapters config (in the instance object everything under the attribute "native") is accessible via
-		// this.config:
-		this.log.info("config api_key: " + this.config.api_key);
-		this.log.info("config port: " + this.config.port);
-
 		this.subscribeObjects(`system.adapter.${this.namespace}`);
 
 		this.subscribeForeignObjects("*");
 
 		this.server = new ExpressMCPServer({ adapter: this });
 		this.listObjectsWithSettings((id, obj) => {
-			this.server.addtool(id, obj);
+			//this.server.addtool(id, obj);
 		});
 
 		this.server.start();
+
+		try {
+			const enums = await this.getEnumAsync("functions");
+			if (enums) {
+				for (const enumId in enums.result) {
+					const functions = enums.result[enumId];
+					functions.common.members.forEach((member) => {
+						this.getForeignObject(member, (err, obj) => {
+							if (err) {
+								this.log.error(`Error getting object ${member}: ${err}`);
+							} else {
+								if (Object.prototype.hasOwnProperty.call(this.autodetectedDevices, member)) {
+									this.autodetectedDevices[member].functions.push(functions.common.name.en);
+								} else {
+									this.autodetectedDevices[member] = {
+										definition: obj,
+										functions: [functions.common.name.en],
+									};
+								}
+
+								this.log.info(`Object ${member}: ${JSON.stringify(obj)}`);
+							}
+						});
+					});
+				}
+			} else {
+				this.log.warn("No enums found");
+			}
+		} catch (err) {
+			this.log.error(`Error getting enums: ${err}`);
+		}
 	}
 
 	/**
@@ -93,28 +117,22 @@ class McpServer extends utils.Adapter {
 	//  * @param {ioBroker.Object | null | undefined} obj
 	//  */
 	onObjectChange(id, obj) {
-		if (obj) {
-			// The object was changed
-			if (obj.common && obj.common.custom && obj.common.custom[this.namespace]) {
-				console.log("object added");
-			} else {
-				if (this.server.tools[id]) {
-					this.server.removetool(id);
-				}
-			}
-			//this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
-		} else {
-			// The object was deleted
+		if (obj.common && obj.common.custom && obj.common.custom[this.namespace]) {
 			if (this.server.tools[id]) {
 				this.server.removetool(id);
+				this.server.addtool(id, obj.common);
+				console.log("object changed, delting and readding it");
+			} else {
+				this.server.addtool(id, obj.common);
+				console.log("object added");
 			}
-			this.log.info(`object ${id} deleted`);
+		} else {
+			if (this.server.tools[id]) {
+				this.server.removetool(id);
+				this.log.info(`object ${id} deleted`);
+			}
 		}
-		this.listObjectsWithSettings((id, obj) => {
-			console.log(id, obj);
-		});
 	}
-
 	/**
 	 * Is called if a subscribed state changes
 	 * @param {string} id
