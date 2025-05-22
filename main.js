@@ -52,6 +52,7 @@ class McpServer extends utils.Adapter {
 
 		this.subscribeForeignObjects("*");
 
+		await this.setObjectNotExistsAsync("memory", { type: "channel", common: { name: "memory" }, native: {} });
 		this.server = new ExpressMCPServer({ adapter: this });
 		this.listObjectsWithSettings((id, obj) => {
 			//this.server.addtool(id, obj);
@@ -117,7 +118,7 @@ class McpServer extends utils.Adapter {
 	//  * @param {ioBroker.Object | null | undefined} obj
 	//  */
 	onObjectChange(id, obj) {
-		if (obj.common && obj.common.custom && obj.common.custom[this.namespace]) {
+		/* if (obj.common && obj.common.custom && obj.common.custom[this.namespace]) {
 			if (this.server.tools[id]) {
 				this.server.removetool(id);
 				this.server.addtool(id, obj.common);
@@ -131,7 +132,7 @@ class McpServer extends utils.Adapter {
 				this.server.removetool(id);
 				this.log.info(`object ${id} deleted`);
 			}
-		}
+		} */
 	}
 	/**
 	 * Is called if a subscribed state changes
