@@ -1,8 +1,12 @@
 {
 	"servers": {
-		"my-server": {
-			"type": "sse",
-			"url": "http://localhost:4141/"
+		"iobroker-remote": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "mcp-remote", "http://localhost:4141/mcp", "--allow-http"],
+			"env": {
+				"GEMINI_API_KEY": "AIzaSyDcM9F9p-2ZZDn7XNft71bXluighgBtWBk"
+			}
 		}
 	}
 }

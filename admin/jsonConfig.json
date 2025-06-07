@@ -1,12 +1,34 @@
 {
-	"i18n": true,
-	"type": "panel",
+	"type": "tabs",
 	"items": {
-		"port": {
-			"type": "text",
-			"label": "Port",
-			"newLine": true,
-			"default": "4141"
+		"MCP-Server": {
+			"type": "panel",
+			"label": "MCP-Server",
+			"items": {
+				"apiKey": {
+					"type": "text",
+					"label": "Google Gemini API Key",
+					"tooltip": "Enter your API key here (required to fetch models)."
+				},
+				"refreshAllModelsButton": {
+					"type": "sendTo",
+					"command": "refreshAllGeminiModels",
+					"jsonData": "{\"apiKey\": \"${data.apiKey}\"}",
+					"label": "Refresh All Models",
+					"tooltip": "Click to fetch and refresh both lists of available Gemini models after entering/saving your API Key.",
+					"sm": 3
+				},
+				"models": {
+					"type": "selectSendTo",
+					"command": "getGeminiModels",
+					"label": "Select Language Model"
+				},
+				"embeddingModel": {
+					"type": "selectSendTo",
+					"command": "getGeminiEmbeddingModels",
+					"label": "Select Embedding Model"
+				}
+			}
 		}
 	}
 }

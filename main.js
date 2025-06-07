@@ -1,15 +1,7 @@
 "use strict";
-
-//import { z } from "zod";
-/*
- * Created with @iobroker/create-adapter v2.6.5
- */
-
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
+const { GoogleGenAI } = require("@google/genai");
 const utils = require("@iobroker/adapter-core");
-const ExpressMCPServer = require("./lib/mcp-server.js").ExpressMCPServer;
-const server = null;
+//const MCPS = require("@holgerwill/iobroker-mcp-server");
 // Load your modules here, e.g.:
 // const fs = require("fs");
 
@@ -24,86 +16,36 @@ class McpServer extends utils.Adapter {
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
-		this.on("objectChange", this.onObjectChange.bind(this));
-		// this.on("message", this.onMessage.bind(this));
+		//this.on("objectChange", this.onObjectChange.bind(this));
+		this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
-		this.server = null;
-		this.autodetectedDevices = {};
 	}
-	async listObjectsWithSettings(cb) {
-		const objects = await this.getForeignObjectsAsync("*", "state");
-		for (const id in objects) {
-			const obj = objects[id];
-			if (
-				obj.common &&
-				obj.common.custom &&
-				obj.common.custom[this.namespace] &&
-				obj.common.custom[this.namespace].enabled == true
-			) {
-				cb(id, obj.common);
-			}
-		}
-	}
-	/**
-	 * Is called when databases are connected and adapter received configuration.
-	 */
+
 	async onReady() {
 		this.subscribeObjects(`system.adapter.${this.namespace}`);
-
+		console.log(this.config);
 		this.subscribeForeignObjects("*");
 
-		await this.setObjectNotExistsAsync("memory", { type: "channel", common: { name: "memory" }, native: {} });
-		this.server = new ExpressMCPServer({ adapter: this });
-		this.listObjectsWithSettings((id, obj) => {
-			//this.server.addtool(id, obj);
+		import("@holgerwill/iobroker-mcp-server").then((MCPS) => {
+			const server = new MCPS.IOBrokerMCPServerHttp({
+				adapter: this,
+				namespace: this.namespace,
+				api: MCPS.ioBrokerAdapterApi,
+				port: this.config.mcpPort,
+				geminiApiKey: this.config.apiKey,
+				dbPath: utils.getAbsoluteInstanceDataDir(this) + "/vectraIndex",
+			});
+			server.start();
+			this.setState("info.connection", true, true);
 		});
 
-		this.server.start();
-
-		try {
-			const enums = await this.getEnumAsync("functions");
-			if (enums) {
-				for (const enumId in enums.result) {
-					const functions = enums.result[enumId];
-					functions.common.members.forEach((member) => {
-						this.getForeignObject(member, (err, obj) => {
-							if (err) {
-								this.log.error(`Error getting object ${member}: ${err}`);
-							} else {
-								if (Object.prototype.hasOwnProperty.call(this.autodetectedDevices, member)) {
-									this.autodetectedDevices[member].functions.push(functions.common.name.en);
-								} else {
-									this.autodetectedDevices[member] = {
-										definition: obj,
-										functions: [functions.common.name.en],
-									};
-								}
-
-								this.log.info(`Object ${member}: ${JSON.stringify(obj)}`);
-							}
-						});
-					});
-				}
-			} else {
-				this.log.warn("No enums found");
-			}
-		} catch (err) {
-			this.log.error(`Error getting enums: ${err}`);
-		}
+		//this.sendToUI("getGeminiModels", {}, (models) => {})
+		//await this.setObjectNotExistsAsync("memory", { type: "channel", common: { name: "memory" }, native: {} });
+		//this.server = new ExpressMCPServer({ adapter: this });
 	}
 
-	/**
-	 * Is called when adapter shuts down - callback has to be called under any circumstances!
-	 * @param {() => void} callback
-	 */
 	onUnload(callback) {
 		try {
-			// Here you must clear all timeouts or intervals that may still be active
-			// clearTimeout(timeout1);
-			// clearTimeout(timeout2);
-			// ...
-			// clearInterval(interval1);
-
 			callback();
 		} catch (e) {
 			callback();
@@ -118,22 +60,13 @@ class McpServer extends utils.Adapter {
 	//  * @param {ioBroker.Object | null | undefined} obj
 	//  */
 	onObjectChange(id, obj) {
-		/* if (obj.common && obj.common.custom && obj.common.custom[this.namespace]) {
-			if (this.server.tools[id]) {
-				this.server.removetool(id);
-				this.server.addtool(id, obj.common);
-				console.log("object changed, delting and readding it");
-			} else {
-				this.server.addtool(id, obj.common);
-				console.log("object added");
-			}
-		} else {
-			if (this.server.tools[id]) {
-				this.server.removetool(id);
-				this.log.info(`object ${id} deleted`);
-			}
-		} */
+		if (obj.type === "State" && obj.common.custom && obj.common.custom[this.namespace]) {
+			this.log.info(
+				`State ${id} has ${this.namespace} custom setting. it is ${obj.common.custom[this.namespace].enabled ? "enabled" : "disabled"}: ${JSON.stringify(obj.common.custom[this.namespace])}`,
+			);
+		}
 	}
+
 	/**
 	 * Is called if a subscribed state changes
 	 * @param {string} id
@@ -149,23 +82,55 @@ class McpServer extends utils.Adapter {
 		}
 	}
 
-	// If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
-	// /**
-	//  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-	//  * Using this method requires "common.messagebox" property to be set to true in io-package.json
-	//  * @param {ioBroker.Message} obj
-	//  */
-	// onMessage(obj) {
-	// 	if (typeof obj === "object" && obj.message) {
-	// 		if (obj.command === "send") {
-	// 			// e.g. send email or pushover or whatever
-	// 			this.log.info("send command");
+	//If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
+	/**
+	 * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+	 * Using this method requires "common.messagebox" property to be set to true in io-package.json
+	 * @param {ioBroker.Message} obj
+	 */
+	/**
+	 * Helper function to fetch and process models (avoids code duplication)
+	 * @param {string} apiKey The API key to use
+	 * @returns {Promise<Array<{value: string, label: string}>>}
+	 */
+	async fetchAndFilterGeminiModels(apiKey, modelType) {
+		const models = [{ label: "Enter API Key & click Refresh", value: "" }];
+		this.genAI = new GoogleGenAI({ apiKey: apiKey });
+		const modelsPager = await this.genAI.models.list();
 
-	// 			// Send response in callback if required
-	// 			if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-	// 		}
-	// 	}
-	// }
+		for await (const m of modelsPager) {
+			if (m.supportedActions && m.supportedActions.includes(modelType)) {
+				models.push({ value: m.name || "", label: m.displayName || m.name || "none" });
+			}
+		}
+		return models;
+	}
+
+	async onMessage(obj) {
+		const apiKey = obj.message?.apiKey || this.config.apiKey;
+		try {
+			let models = [{ label: "Enter API Key & Save", value: "" }];
+			switch (obj.command) {
+				case "getGeminiModels": {
+					if (!apiKey) return;
+					models = await this.fetchAndFilterGeminiModels(apiKey, "generateContent");
+					break;
+				}
+				case "getGeminiEmbeddingModels": {
+					if (!apiKey) return;
+					models = await this.fetchAndFilterGeminiModels(apiKey, "embedContent");
+					break;
+				}
+				default:
+					this.log.warn(`[onMessage] Unhandled command: ${obj.command}`);
+					break;
+			}
+			this.sendTo(obj.from, obj.command, models, obj.callback);
+		} catch (e) {
+			this.log.error(`[onMessage] Error during command processing: ${e.message}`);
+			this.sendTo(obj.from, obj.command, [{ label: `Error: ${e.message}`, value: "" }], obj.callback);
+		}
+	}
 }
 
 if (require.main !== module) {

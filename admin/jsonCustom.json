@@ -2,19 +2,13 @@
 	"i18n": true,
 	"type": "panel",
 	"items": {
-		"mcp_description": {
+		"description": {
 			"type": "text",
 			"label": "Description",
 			"newLine": true,
 			"sm": 12,
-			"help": "This is a help text for the custom text setting."
-		},
-		"enable_setter": {
-			"type": "checkbox",
-			"label": "Enable Setter",
-			"newLine": true,
-			"sm": 12,
-			"help": "This is a help text for the custom checkbox setting."
+			"help": "This is a help text for the custom text setting.",
+			"minRows": 4
 		}
 	}
 }
