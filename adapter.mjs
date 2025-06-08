@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+// eslint-disable-next-line
 import * as utils from "@iobroker/adapter-core";
 // Load your modules here, e.g.:
 // import fs from "fs";
@@ -52,7 +53,7 @@ class McpServer extends utils.Adapter {
 	}
 
 	async onMessage(obj) {
-		const apiKey = obj.message?.apiKey || this.config.apiKey;
+		const apiKey = obj.message.apiKey || this.config.apiKey;
 		try {
 			let models = [{ label: "Enter API Key & Save", value: "" }];
 			switch (obj.command) {
