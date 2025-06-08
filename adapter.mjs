@@ -9,7 +9,7 @@ class McpServer extends utils.Adapter {
 	constructor(options) {
 		super({
 			...options,
-			name: "mcp-server",
+			name: "kiwi",
 		});
 		this.on("ready", this.onReady.bind(this));
 

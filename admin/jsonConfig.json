@@ -1,9 +1,9 @@
 {
 	"type": "tabs",
 	"items": {
-		"MCP-Server": {
+		"ServerSettings": {
 			"type": "panel",
-			"label": "MCP-Server",
+			"label": "Server Settings",
 			"items": {
 				"apiKey": {
 					"type": "text",
@@ -14,6 +14,17 @@
 					"type": "selectSendTo",
 					"command": "getGeminiModels",
 					"label": "Select Language Model"
+				}
+			}
+		},
+		"ClientSettings": {
+			"type": "panel",
+			"label": "Client Settings",
+			"items": {
+				"systemPrompt": {
+					"type": "text",
+					"label": "System Prompt",
+					"tooltip": "the system prompt for the integrated chat client"
 				}
 			}
 		}

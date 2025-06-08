@@ -1,7 +1,7 @@
 {
-  "name": "iobroker.mcp-server",
+  "name": "iobroker.kiwi",
   "version": "0.0.2",
-  "description": "an MCP Server that controlls io-broker with AI from any MCP Client",
+  "description": "an MCP Server that controlls io-broker with AI from any MCP Client and an integrated ai powerd chat client and visualization",
   "author": {
     "name": "Holger Will",
     "email": "h.will@klimapartner.de"
@@ -12,7 +12,6 @@
     "LLM",
     "MCP",
     "AI",
-    "ChatGPT",
     "Gemini"
   ],
   "repository": {
@@ -84,7 +83,7 @@
     "release": "release-script"
   },
   "bugs": {
-    "url": "https://github.com/Holger-Will/ioBroker.mcp-server/issues"
+    "url": "https://github.com/Holger-Will/ioBroker.kiwi/issues"
   },
   "readmeFilename": "README.md"
 }
