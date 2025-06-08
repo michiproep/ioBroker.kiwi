@@ -25,6 +25,16 @@
 		// "noUnusedParameters": true,
 		"useUnknownInCatchVariables": false
 	},
-	"include": ["**/*.js", "**/*.d.ts", "adapter.mjs", "lib/mcp-web.mjs"],
+	"include": [
+		"**/*.js",
+		"**/*.d.ts",
+		"adapter.mjs",
+		"lib/mcp-web.mjs",
+		"lib/vectorize.mjs",
+		"lib/public/components/ioBrokerApp.mjs",
+		"lib/public/components/getState.mjs",
+		"lib/public/components/chatApp.mjs",
+		"lib/api_adapter.mjs"
+	],
 	"exclude": ["node_modules/**", "widgets/**"]
 }

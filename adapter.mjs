@@ -2,8 +2,6 @@ import { GoogleGenAI } from "@google/genai";
 import * as utils from "@iobroker/adapter-core";
 // Load your modules here, e.g.:
 // import fs from "fs";
-
-console.log("Loading ...");
 class McpServer extends utils.Adapter {
 	/**
 	 * @param {Partial<utils.AdapterOptions>} [options={}]
@@ -13,7 +11,6 @@ class McpServer extends utils.Adapter {
 			...options,
 			name: "mcp-server",
 		});
-		console.log("Constructor...");
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
 		//this.on("objectChange", this.onObjectChange.bind(this));
@@ -22,11 +19,10 @@ class McpServer extends utils.Adapter {
 	}
 
 	async onReady() {
-		this.subscribeObjects(`system.adapter.${this.namespace}`);
+		//this.subscribeObjects(`system.adapter.${this.namespace}`);
 		console.log(this.config);
-		this.subscribeForeignObjects("*");
 
-		import("@holgerwill/iobroker-mcp-server").then((MCPS) => {
+		/* import("@holgerwill/iobroker-mcp-server").then((MCPS) => {
 			const server = new MCPS.IOBrokerMCPServerHttp({
 				adapter: this,
 				namespace: this.namespace,
@@ -37,7 +33,7 @@ class McpServer extends utils.Adapter {
 			});
 			server.start();
 			this.setState("info.connection", true, true);
-		});
+		}); */
 
 		//this.sendToUI("getGeminiModels", {}, (models) => {})
 		//await this.setObjectNotExistsAsync("memory", { type: "channel", common: { name: "memory" }, native: {} });
