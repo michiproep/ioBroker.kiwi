@@ -6,7 +6,7 @@
     "name": "Holger Will",
     "email": "h.will@klimapartner.de"
   },
-  "homepage": "https://github.com/Holger-Will/ioBroker.mcp-server",
+  "homepage": "https://github.com/Holger-Will/ioBroker.kiwi",
   "license": "MIT",
   "keywords": [
     "LLM",
@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:Holger-Will/ioBroker.mcp-server.git"
+    "url": "git@github.com:Holger-Will/ioBroker.kiwi.git"
   },
   "engines": {
     "node": ">= 20"

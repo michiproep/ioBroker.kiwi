@@ -54,7 +54,7 @@
 		"icon": "kiwi-logo.png",
 		"enabled": true,
 		"extIcon": "https://raw.githubusercontent.com/Holger-Will/ioBroker.kiwi/main/admin/kiwi-logo.png",
-		"readme": "https://github.com/Holger-Will/ioBroker.mcp-server/blob/main/README.md",
+		"readme": "https://github.com/Holger-Will/ioBroker.kiwi/blob/main/README.md",
 		"loglevel": "info",
 		"tier": 3,
 		"mode": "daemon",
