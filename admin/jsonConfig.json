@@ -16,17 +16,6 @@
 					"label": "Select Language Model"
 				}
 			}
-		},
-		"ClientSettings": {
-			"type": "panel",
-			"label": "Client Settings",
-			"items": {
-				"systemPrompt": {
-					"type": "text",
-					"label": "System Prompt",
-					"tooltip": "the system prompt for the integrated chat client"
-				}
-			}
 		}
 	}
 }
