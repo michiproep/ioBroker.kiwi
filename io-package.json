@@ -69,6 +69,8 @@
 		"localLinks": {
 			"_default": "http://%host%:%port%/"
 		},
+		"webExtension": "lib/web.js",
+
 		"supportCustoms": true,
 		"dependencies": [
 			{
@@ -82,6 +84,7 @@
 		]
 	},
 	"native": {
+		"webInstance": "*",
 		"port": 4142,
 		"mcpPort": 4141,
 		"bind": "0.0.0.0",

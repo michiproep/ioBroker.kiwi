@@ -25,6 +25,6 @@
 		// "noUnusedParameters": true,
 		"useUnknownInCatchVariables": false
 	},
-	"include": ["**/*.js", "**/*.d.ts"],
+	"include": ["**/*.js", "**/*.d.ts", "adapter.mjs", "lib/mcp-web.mjs"],
 	"exclude": ["node_modules/**", "widgets/**"]
 }
