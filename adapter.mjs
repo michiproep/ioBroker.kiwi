@@ -12,69 +12,18 @@ class McpServer extends utils.Adapter {
 			name: "mcp-server",
 		});
 		this.on("ready", this.onReady.bind(this));
-		this.on("stateChange", this.onStateChange.bind(this));
-		//this.on("objectChange", this.onObjectChange.bind(this));
+
 		this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
 	}
 
-	async onReady() {
-		//this.subscribeObjects(`system.adapter.${this.namespace}`);
-		console.log(this.config);
-
-		/* import("@holgerwill/iobroker-mcp-server").then((MCPS) => {
-			const server = new MCPS.IOBrokerMCPServerHttp({
-				adapter: this,
-				namespace: this.namespace,
-				api: MCPS.ioBrokerAdapterApi,
-				port: this.config.mcpPort,
-				geminiApiKey: this.config.apiKey,
-				dbPath: utils.getAbsoluteInstanceDataDir(this) + "/vectraIndex",
-			});
-			server.start();
-			this.setState("info.connection", true, true);
-		}); */
-
-		//this.sendToUI("getGeminiModels", {}, (models) => {})
-		//await this.setObjectNotExistsAsync("memory", { type: "channel", common: { name: "memory" }, native: {} });
-		//this.server = new ExpressMCPServer({ adapter: this });
-	}
+	async onReady() {}
 
 	onUnload(callback) {
 		try {
 			callback();
 		} catch (e) {
 			callback();
-		}
-	}
-
-	// If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
-	// You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
-	// /**
-	//  * Is called if a subscribed object changes
-	//  * @param {string} id
-	//  * @param {ioBroker.Object | null | undefined} obj
-	//  */
-	onObjectChange(id, obj) {
-		if (obj.type === "State" && obj.common.custom && obj.common.custom[this.namespace]) {
-			this.log.info(
-				`State ${id} has ${this.namespace} custom setting. it is ${obj.common.custom[this.namespace].enabled ? "enabled" : "disabled"}: ${JSON.stringify(obj.common.custom[this.namespace])}`,
-			);
-		}
-	}
-
-	/**
-	 * Is called if a subscribed state changes
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
-	 */
-	onStateChange(id, state) {
-		if (state) {
-			// The state was changed
-			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-		} else {
-			// The state was deleted
-			this.log.info(`state ${id} deleted`);
 		}
 	}
 
@@ -110,11 +59,6 @@ class McpServer extends utils.Adapter {
 				case "getGeminiModels": {
 					if (!apiKey) return;
 					models = await this.fetchAndFilterGeminiModels(apiKey, "generateContent");
-					break;
-				}
-				case "getGeminiEmbeddingModels": {
-					if (!apiKey) return;
-					models = await this.fetchAndFilterGeminiModels(apiKey, "embedContent");
 					break;
 				}
 				default:
