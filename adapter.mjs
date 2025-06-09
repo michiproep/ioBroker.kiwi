@@ -1,4 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
+import { Chatbot } from "./lib/chatbot.mjs";
+
 // eslint-disable-next-line
 import * as utils from "@iobroker/adapter-core";
 // Load your modules here, e.g.:
@@ -13,27 +15,53 @@ class McpServer extends utils.Adapter {
 			name: "kiwi",
 		});
 		this.on("ready", this.onReady.bind(this));
-
+		this.on("stateChange", this.onStateChange.bind(this));
 		this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
 	}
 
-	async onReady() {}
-
-	onUnload(callback) {
+	async onReady() {
+		utils.getAbsoluteInstanceDataDir(this);
+		console.log("HALLLLLOOOOO: " + utils.getAbsoluteInstanceDataDir(this));
+		this.subscribeStates("chat.prompt");
+		this.setState("info.connection", { val: true, ack: true });
+		this.chatbot = new Chatbot({
+			apiKey: this.config.apiKey,
+			modelName: this.config.models,
+			systemPrompt: this.config.systemPrompt,
+			temperature: this.config.temperature || 0.7,
+			adapter: this,
+		});
+		// Initialize
+		await this.chatbot.init();
+	}
+	async onStateChange(id, state) {
+		this.log.info(`State changed: ${id} to ${state.val}`);
+		if (state && !state.ack) {
+			const stateName = id.replace(`${this.namespace}.`, "");
+			//this.log.info(`Ack: ${stateName} to ${state.val}`);
+			if (stateName === "chat.prompt") {
+				const response = await this.chatbot?.prompt(state.val);
+				this.setState("chat.response", {
+					val: response,
+					ack: true,
+				});
+			}
+			this.setState(stateName, { val: state.val, ack: true });
+		} else {
+			this.log.debug(
+				`State ${id} changed to ${state ? state.val : "undefined"} (ack: ${state ? state.ack : "undefined"})`,
+			);
+		}
+	}
+	async onUnload(callback) {
 		try {
+			this.chatbot ? await this.chatbot.cleanup() : null;
 			callback();
 		} catch (e) {
 			callback();
 		}
 	}
-
-	//If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
-	/**
-	 * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-	 * Using this method requires "common.messagebox" property to be set to true in io-package.json
-	 * @param {ioBroker.Message} obj
-	 */
 	/**
 	 * Helper function to fetch and process models (avoids code duplication)
 	 * @param {string} apiKey The API key to use
@@ -51,10 +79,17 @@ class McpServer extends utils.Adapter {
 		}
 		return models;
 	}
+	//If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
+	/**
+	 * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+	 * Using this method requires "common.messagebox" property to be set to true in io-package.json
+	 * @param {ioBroker.Message} obj
+	 */
 
 	async onMessage(obj) {
-		const apiKey = obj.message.apiKey || this.config.apiKey;
+		this.log.info(`[onMessage] Received command: ${JSON.stringify(obj)} `);
 		try {
+			const apiKey = this.config.apiKey;
 			let models = [{ label: "Enter API Key & Save", value: "" }];
 			switch (obj.command) {
 				case "getGeminiModels": {

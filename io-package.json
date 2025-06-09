@@ -67,7 +67,7 @@
 			"custom": "json"
 		},
 		"localLinks": {
-			"_default": "http://%host%:%port%/"
+			"_default": "%protocol%://%ip%:%port%/kiwi/%instance%/index.html"
 		},
 		"webExtension": "lib/web.js",
 
@@ -85,15 +85,12 @@
 	},
 	"native": {
 		"webInstance": "*",
-		"port": 4142,
-		"mcpPort": 4141,
-		"bind": "0.0.0.0",
 		"models": "gemini-2.5-flash-preview-05-20",
 		"embeddingModel": "gemini-embedding-exp-03-07",
 		"apiKey": "",
-		"systemPrompt": "You are an MCP Server that controls io-broker with AI from any MCP Client."
+		"temperature": 0.2,
+		"systemPrompt": "Your Name is Kiwi. You are a friendly assistant that can help control and maintain ioBroker Systems."
 	},
-
 	"objects": [],
 	"instanceObjects": [
 		{
@@ -114,6 +111,40 @@
 				"read": true,
 				"write": false,
 				"def": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "chat",
+			"type": "channel",
+			"common": {
+				"name": "Chat_Interface"
+			},
+			"native": {}
+		},
+		{
+			"_id": "chat.prompt",
+			"type": "state",
+			"common": {
+				"role": "text",
+				"name": "promt",
+				"desc": "The prompt that is sent to the AI model for processing.",
+				"type": "string",
+				"read": true,
+				"write": true
+			},
+			"native": {}
+		},
+		{
+			"_id": "chat.response",
+			"type": "state",
+			"common": {
+				"role": "text",
+				"name": "response",
+				"desc": "The response from the AI model.",
+				"type": "string",
+				"read": true,
+				"write": false
 			},
 			"native": {}
 		}

@@ -5,6 +5,14 @@
 			"type": "panel",
 			"label": "Server Settings",
 			"items": {
+				"webInstance": {
+					"type": "instance",
+					"label": "Instance of Web Adapter",
+					"adapter": "web",
+					"tooltip": "Select the instance of the web adapter to use for the chat client.",
+					"all": true,
+					"sm": 6
+				},
 				"apiKey": {
 					"type": "text",
 					"label": "Google Gemini API Key",
@@ -13,7 +21,28 @@
 				"models": {
 					"type": "selectSendTo",
 					"command": "getGeminiModels",
-					"label": "Select Language Model"
+					"label": "Select Language Model",
+					"sm": 6
+				}
+			}
+		},
+		"BotSettings": {
+			"type": "panel",
+			"label": "Chat Settings",
+			"items": {
+				"systemPrompt": {
+					"type": "text",
+					"label": "System Prompt",
+					"tooltip": "the system prompt for the integrated chat client.",
+					"minRows": 4
+				},
+				"temperature": {
+					"type": "number",
+					"min": 0,
+					"max": 2,
+					"step": 0.1,
+					"label": "temperature. the 'randomness' or 'creativeness' of the response",
+					"sm": 4
 				}
 			}
 		}
