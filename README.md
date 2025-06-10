@@ -22,6 +22,9 @@ it might work without using `npx mcp-remote`. I'm using [StreamableHTTPServerTra
 
 ## Basic usage
 
+![image](https://github.com/user-attachments/assets/2a2c5aab-afb1-49a8-866c-323f01a23e28)
+
+
 ## Changelog
 
 not much here yet. still early alpha. consider this the frist release
