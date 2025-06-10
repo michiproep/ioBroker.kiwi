@@ -2,7 +2,7 @@
 	"common": {
 		"messagebox": true,
 		"name": "kiwi",
-		"version": "0.1.9",
+		"version": "0.1.10",
 		"news": {
 			"0.1.1": {
 				"en": "initial release",
@@ -96,8 +96,6 @@
 			}
 		]
 	},
-	"protectedNative": ["apiKey"],
-	"encryptedNative": ["apiKey"],
 	"native": {
 		"webInstance": "*",
 		"models": "gemini-2.5-flash-preview-05-20",
