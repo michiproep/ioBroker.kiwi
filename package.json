@@ -1,6 +1,6 @@
 {
   "name": "iobroker.kiwi",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "an MCP Server that controlls io-broker with AI from any MCP Client and an integrated ai powerd chat client and visualization",
   "author": {
     "name": "Holger Will",
