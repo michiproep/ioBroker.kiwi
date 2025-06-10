@@ -2,7 +2,7 @@
 	"common": {
 		"messagebox": true,
 		"name": "kiwi",
-		"version": "0.1.5",
+		"version": "0.1.6",
 		"news": {
 			"0.1.1": {
 				"en": "initial release",
