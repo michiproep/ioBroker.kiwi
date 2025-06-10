@@ -1,10 +1,13 @@
 # ioBroker.kiwi
 
-**ATTENTION! Early alpha**  
-Expect things to break.  
-The following settings can be used to test this adapter in VSCode or Claude Desktop.
+**ATTENTION! Early alpha**
+
+- limited functionality
+- Expect things to break.
 
 ## Connecting
+
+The following settings can be used to test this adapter in VSCode or Claude Desktop.
 
 ```json
 {
@@ -19,6 +22,13 @@ The following settings can be used to test this adapter in VSCode or Claude Desk
 ```
 
 It might work without using `npx mcp-remote`. I'm using [StreamableHTTPServerTransport](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http), which is not supported by all clients yet.
+
+## ioBroker
+
+you can use it from inside iobroker with two states:
+
+- kiwi.0.chat.prompt
+- kiwi.0.chat.response
 
 ## Basic Usage
 
@@ -55,6 +65,8 @@ there are other tools the bot can use like setState, getState, setObject, getObj
 - **getHistory.mjs** – Retrieve historical state data (time series, trends).
 - ~~**getAdapters.mjs** – List all installed adapters in the system.~~
 - ~~**getInstances.mjs** – List all running adapter instances.~~
+
+**Attention** i removed a tool from an earlier version, used to discover non indexed states and objects. i will add that back in later.
 
 ## Changelog
 
