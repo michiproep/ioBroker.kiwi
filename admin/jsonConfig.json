@@ -16,7 +16,8 @@
 				"apiKey": {
 					"type": "text",
 					"label": "Google Gemini API Key",
-					"tooltip": "Enter your API key here (required to fetch models)."
+					"tooltip": "Enter your API key here (required to fetch models).",
+					"sm": 12
 				},
 				"models": {
 					"type": "selectSendTo",
@@ -34,7 +35,8 @@
 					"type": "text",
 					"label": "System Prompt",
 					"tooltip": "the system prompt for the integrated chat client.",
-					"minRows": 4
+					"minRows": 6,
+					"sm": 12
 				},
 				"temperature": {
 					"type": "number",
