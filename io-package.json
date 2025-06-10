@@ -89,6 +89,8 @@
 		"embeddingModel": "gemini-embedding-exp-03-07",
 		"apiKey": "",
 		"temperature": 0.2,
+		"namespace": "kiwi.0",
+		"dataDir": "/opt/iobroker-data/kiwi.0",
 		"systemPrompt": "Your Name is Kiwi. You are a friendly assistant that can help control and maintain ioBroker Systems."
 	},
 	"objects": [],

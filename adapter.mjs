@@ -21,9 +21,28 @@ class McpServer extends utils.Adapter {
 	}
 
 	async onReady() {
-		utils.getAbsoluteInstanceDataDir(this);
-		console.log("HALLLLLOOOOO: " + utils.getAbsoluteInstanceDataDir(this));
+		//const webInstance = this.config.webInstance == "*" ? "web.0" : this.config.webInstance;
+		const newPath = utils.getAbsoluteInstanceDataDir(this);
+		if (this.config.dataDir !== newPath) {
+			try {
+				// 1. Get the current instance object
+				const instanceObj = await this.getForeignObjectAsync(`system.adapter.${this.namespace}`);
+
+				if (instanceObj) {
+					instanceObj.native.dataDir = utils.getAbsoluteInstanceDataDir(this);
+					instanceObj.native.namespace = this.namespace;
+					await this.setForeignObject(`system.adapter.${this.namespace}`, instanceObj);
+					this.log.info(`Successfully updated 'myCustomDataPath' to '${newPath}'. Adapter will restart.`);
+				} else {
+					this.log.error(`Could not find instance object for ${this.namespace}`);
+				}
+			} catch (e) {
+				this.log.error(`Error updating configuration: ${e.message}`);
+			}
+		}
+		this.subscribeObjects("*");
 		this.subscribeStates("chat.prompt");
+		this.subscribeForeignObjects("*");
 		this.setState("info.connection", { val: true, ack: true });
 		this.chatbot = new Chatbot({
 			apiKey: this.config.apiKey,
@@ -31,10 +50,12 @@ class McpServer extends utils.Adapter {
 			systemPrompt: this.config.systemPrompt,
 			temperature: this.config.temperature || 0.7,
 			adapter: this,
+			dbPath: this.config.dataDir + "/vectraIndex",
 		});
 		// Initialize
 		await this.chatbot.init();
 	}
+
 	async onStateChange(id, state) {
 		this.log.info(`State changed: ${id} to ${state.val}`);
 		if (state && !state.ack) {
