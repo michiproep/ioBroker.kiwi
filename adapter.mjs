@@ -23,6 +23,13 @@ class McpServer extends utils.Adapter {
 	async onReady() {
 		//const webInstance = this.config.webInstance == "*" ? "web.0" : this.config.webInstance;
 		const newPath = utils.getAbsoluteInstanceDataDir(this);
+		// Ensure the directory exists, including all ancestors
+		try {
+			await import("fs/promises").then((fs) => fs.mkdir(newPath, { recursive: true }));
+			this.log.info(`[Kiwi Adapter] Ensured data directory exists: ${newPath}`);
+		} catch (e) {
+			this.log.error(`[Kiwi Adapter] Failed to create data directory: ${e.message}`);
+		}
 		if (this.config.dataDir !== newPath) {
 			try {
 				// 1. Get the current instance object
@@ -32,7 +39,10 @@ class McpServer extends utils.Adapter {
 					instanceObj.native.dataDir = utils.getAbsoluteInstanceDataDir(this);
 					instanceObj.native.namespace = this.namespace;
 					await this.setForeignObject(`system.adapter.${this.namespace}`, instanceObj);
-					this.log.info(`Successfully updated 'myCustomDataPath' to '${newPath}'. Adapter will restart.`);
+					this.log.info(
+						`[Kiwi Adapter] Successfully updated 'myCustomDataPath' to '${newPath}'. Adapter will restart.`,
+					);
+					return;
 				} else {
 					this.log.error(`Could not find instance object for ${this.namespace}`);
 				}
