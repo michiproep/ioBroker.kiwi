@@ -3,6 +3,7 @@ import { Chatbot } from "./lib/chatbot.mjs";
 import { VectorDB } from "./lib/sqlite-vectorize.mjs";
 // eslint-disable-next-line
 import * as utils from "@iobroker/adapter-core";
+
 // Load your modules here, e.g.:
 // import fs from "fs";
 class McpServer extends utils.Adapter {
@@ -26,6 +27,7 @@ class McpServer extends utils.Adapter {
 		//const webInstance = this.config.webInstance == "*" ? "web.0" : this.config.webInstance;
 		const newPath = utils.getAbsoluteInstanceDataDir(this);
 		// Ensure the directory exists, including all ancestors
+
 		try {
 			await import("fs/promises").then((fs) => fs.mkdir(newPath, { recursive: true }));
 			this.log.info(`[Kiwi Adapter] Ensured data directory exists: ${newPath}`);

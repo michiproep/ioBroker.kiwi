@@ -2,7 +2,7 @@
 	"servers": {
 		"iobroker-remote": {
 			"type": "http",
-			"url": "http://localhost:8082/kiwi/0/mcp",
+			"url": "http://localhost:8083/kiwi/0/mcp",
 			"headers": { "cache-control": "no-cache" }
 		}
 	}

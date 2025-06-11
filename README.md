@@ -7,7 +7,21 @@
 
 ## Connecting
 
-The following settings can be used to test this adapter in VSCode or Claude Desktop.
+The following settings work in modern MCP clients like VSCode or Claude Desktop etc.
+
+```json
+{
+	"servers": {
+		"iobroker-remote": {
+			"type": "http",
+			"url": "http://192.168.178.38:8082/kiwi/0/mcp",
+			"headers": { "cache-control": "no-cache" }
+		}
+	}
+}
+```
+
+for older clients that only support sse and stdio you can use mcp-remote
 
 ```json
 {
@@ -20,8 +34,6 @@ The following settings can be used to test this adapter in VSCode or Claude Desk
 	}
 }
 ```
-
-It might work without using `npx mcp-remote`. I'm using [StreamableHTTPServerTransport](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http), which is not supported by all clients yet.
 
 ## ioBroker
 
@@ -51,6 +63,7 @@ there are other tools the bot can use like setState, getState, setObject, getObj
 - **describeBulk.mjs** – Set descriptions for multiple objects at once.
 - **deleteItemFromIndex.mjs** – Remove an item from the semantic search index.
 - ~~**createScene.mjs** – Create a new ioBroker scene (group of state/value pairs).~~
+- **mingoSearch** - a search tool for objects in the object database. uses MongoDB style queries.
 
 ### low level functions
 
@@ -60,7 +73,7 @@ there are other tools the bot can use like setState, getState, setObject, getObj
 - **getStateBulk.mjs** – Get values of multiple states at once.
 - **setState.mjs** – Set the value of a state.
 - **setStateBulk.mjs** – Set multiple state values at once.
-- **createState.mjs** – Create a new ioBroker state object.
+- ~~**createState.mjs** – Create a new ioBroker state object.~~
 - **getAllRooms.mjs** – List all valid rooms and areas.
 - **getHistory.mjs** – Retrieve historical state data (time series, trends).
 - ~~**getAdapters.mjs** – List all installed adapters in the system.~~
