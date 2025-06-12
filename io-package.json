@@ -2,8 +2,11 @@
 	"common": {
 		"messagebox": true,
 		"name": "kiwi",
-		"version": "0.2.0",
+		"version": "0.3.0",
 		"news": {
+			"0.3.0": {
+				"en": "Added filtering to the search tool; added a new tool to search the object database with mongoDB style queries"
+			},
 			"0.1.1": {
 				"en": "initial release",
 				"de": "Erstveröffentlichung",
