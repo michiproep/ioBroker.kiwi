@@ -42,6 +42,25 @@ you can use it from inside iobroker with two states:
 - kiwi.0.chat.prompt
 - kiwi.0.chat.response
 
+or in javascript adpater
+
+```
+function getAiResponse(txt){
+    return new Promise((resolve,reject)=>{
+        once("kiwi.0.chat.response",data=>{
+            resolve(data.state.val)
+        })
+        setState("kiwi.0.chat.prompt",txt)
+    })
+}
+```
+
+and then
+
+```
+console.log(await getAIResponse("helllo"))
+```
+
 ## Basic Usage
 
 you add descriptions to states with custom configs.
