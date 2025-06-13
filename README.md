@@ -98,7 +98,28 @@ there are other tools the bot can use like setState, getState, setObject, getObj
 - ~~**getAdapters.mjs** – List all installed adapters in the system.~~
 - ~~**getInstances.mjs** – List all running adapter instances.~~
 
-**Attention** i removed a tool from an earlier version, used to discover non indexed states and objects. i will add that back in later.
+## Basic Authentication
+
+get a base64 encoded string gof your username and password
+
+```
+console.log(Buffer.from("username:password").toString("base64"))
+```
+
+```
+{
+	"servers": {
+		"iobroker-remote": {
+			"type": "http",
+			"url": "http://localhost:8082/kiwi/0/mcp",
+			"headers": {
+				"cache-control": "no-cache",
+				"authorization": "Basic YOUR_BASE64_ENCODED_STRING_HERER"
+			}
+		}
+	}
+}
+```
 
 ## Changelog
 
