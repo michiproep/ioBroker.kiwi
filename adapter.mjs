@@ -129,6 +129,8 @@ class McpServer extends utils.Adapter {
 
 	async onObjectChange(id, obj) {
 		if (
+			obj &&
+			obj.common &&
 			obj.common.custom &&
 			obj.common.custom[this.namespace] &&
 			obj.common.custom[this.namespace].enabled == true &&
