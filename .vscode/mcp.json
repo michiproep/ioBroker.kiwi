@@ -1,9 +1,20 @@
 {
+	"inputs": [
+		{
+			"type": "promptString",
+			"id": "base64EncodedAuth",
+			"description": "User Name and password base64 encoded",
+			"password": true
+		}
+	],
 	"servers": {
 		"iobroker-remote": {
 			"type": "http",
-			"url": "http://localhost:8083/kiwi/0/mcp",
-			"headers": { "cache-control": "no-cache" }
+			"url": "http://localhost:8082/kiwi/0/mcp",
+			"headers": {
+				"cache-control": "no-cache",
+				"authorization": "Basic ${input:base64EncodedAuth}"
+			}
 		}
 	}
 }
