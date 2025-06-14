@@ -1,208 +1,201 @@
 {
-    "common": {
-        "messagebox": true,
-        "name": "kiwi",
-        "version": "0.3.1",
-        "news": {
-            "0.4.0": {
-                "en": "added file handling API; stability improvements and better error handling; config translations; bug fixes",
-                "de": "Dateibehandlungs -API hinzugefügt; Stabilitätsverbesserungen und bessere Fehlerbehandlung; Konfigurationsübersetzungen; Fehlerbehebungen",
-                "ru": "Добавлен API обработки файлов; Улучшения стабильности и лучшая обработка ошибок; переводы конфигурации; Исправления ошибок",
-                "pt": "API de manuseio de arquivos adicionada; melhorias de estabilidade e melhor manuseio de erros; traduções de configuração; Correções de bug",
-                "nl": "File Handling API toegevoegd; stabiliteitsverbeteringen en betere foutafhandeling; configuratieverhalingen; Bugfixes",
-                "fr": "API Ajout de l'API de gestion des fichiers; Améliorations de stabilité et meilleure gestion des erreurs; Traductions de configuration; correctifs de bugs",
-                "it": "API di gestione dei file aggiunta; miglioramenti della stabilità e una migliore gestione degli errori; traduzioni di configurazione; Correzioni di bug",
-                "es": "API de manejo de archivos agregado; mejoras de estabilidad y un mejor manejo de errores; traducciones de configuración; correcciones de errores",
-                "pl": "Dodano interfejs API obsługi plików; Ulepszenia stabilności i lepsze obsługi błędów; Tłumaczenia konfiguracyjne; poprawki błędów",
-                "uk": "Додано API обробки файлів; Поліпшення стабільності та краща обробка помилок; конфігурації конфігурації; виправлення помилок",
-                "zh-cn": "添加了文件处理API；稳定性改进和更好的错误处理；配置翻译；错误修复"
-            },
-            "0.3.0": {
-                "en": "Added filtering to the search tool; added a new tool to search the object database with mongoDB style queries",
-                "de": "Filterung zum Suchwerkzeug hinzugefügt; Fügte ein neues Tool hinzu, um die Objektdatenbank mit Abfragen im MongoDB -Stil zu durchsuchen",
-                "ru": "Добавлена ​​фильтрация в инструмент поиска; Добавлен новый инструмент для поиска базы данных объектов с запросами стиля MongoDB",
-                "pt": "Filtragem adicionada à ferramenta de pesquisa; Adicionou uma nova ferramenta para pesquisar o banco de dados de objetos com consultas de estilo MongoDBB",
-                "nl": "Filtering toegevoegd aan het zoektool; Een nieuwe tool toegevoegd om de objectdatabase te doorzoeken met query's in MongoDB -stijl",
-                "fr": "Ajout de filtrage à l'outil de recherche; Ajout d'un nouvel outil pour rechercher la base de données d'objets avec des requêtes de style MongoDB",
-                "it": "Filtro aggiunto allo strumento di ricerca; Aggiunto un nuovo strumento per cercare nel database degli oggetti con query in stile mongodb",
-                "es": "Filtrado agregado a la herramienta de búsqueda; Se agregó una nueva herramienta para buscar la base de datos de objetos con consultas de estilo MongoDB",
-                "pl": "Dodał filtrowanie do narzędzia wyszukiwania; Dodano nowe narzędzie do wyszukiwania bazy danych obiektowych z zapytaniami stylu MongoDB",
-                "uk": "Додано фільтрування до інструменту пошуку; Додано новий інструмент для пошуку в базі даних об'єктів за допомогою запитів у стилі MongoDB",
-                "zh-cn": "将过滤添加到搜索工具中；添加了一个新的工具来搜索使用MongoDB样式查询的对象数据库"
-            },
-            "0.1.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "uk": "Початкова версія",
-                "zh-cn": "首次出版"
-            },
-            "0.0.2": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "uk": "Початкова версія",
-                "zh-cn": "首次出版"
-            }
-        },
-        "titleLang": {
-            "en": "kiwi",
-            "de": "kiwi",
-            "ru": "kiwi",
-            "pt": "kiwi",
-            "nl": "kiwi",
-            "fr": "kiwi",
-            "it": "kiwi",
-            "es": "kiwi",
-            "pl": "kiwi",
-            "uk": "kiwi",
-            "zh-cn": "kiwi"
-        },
-        "desc": {
-            "en": "an MCP Server that controlls io-broker with AI from any MCP Client",
-            "de": "Ein MCP-Server, der IO-Broker mit KI von jedem MCP-Client steuert",
-            "ru": "MCP-сервер, который управляет IO-брокером с ИИ от любого клиента MCP",
-            "pt": "Um servidor MCP que controla o IO Broker com IA de qualquer cliente MCP",
-            "nl": "Een MCP-server die IO-makelaar met AI van elke MCP-client beheert",
-            "fr": "Un serveur MCP qui contrôle le courtier Io-Broker avec n'importe quel client MCP",
-            "it": "Un server MCP che controlla Io-broker con AI da qualsiasi client MCP",
-            "es": "Un servidor MCP que controla IO-Broker con AI desde cualquier cliente de MCP",
-            "pl": "serwer MCP, który kontroluje broker IO z AI od dowolnego klienta MCP",
-            "uk": "Сервер MCP, який контролює IO-брокер з AI від будь-якого клієнта MCP",
-            "zh-cn": "来自任何MCP客户端的AI控制IO-broker的MCP服务器"
-        },
-        "authors": [
-            "Holger Will <h.will@klimapartner.de>"
-        ],
-        "keywords": [
-            "LLM",
-            "MCP",
-            "AI",
-            "Gemini"
-        ],
-        "licenseInformation": {
-            "type": "free",
-            "license": "MIT"
-        },
-        "platform": "Javascript/Node.js",
-        "icon": "kiwi-logo.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/Holger-Will/ioBroker.kiwi/main/admin/kiwi-logo.png",
-        "readme": "https://github.com/Holger-Will/ioBroker.kiwi/blob/main/README.md",
-        "loglevel": "info",
-        "tier": 3,
-        "mode": "daemon",
-        "type": "visualization",
-        "compact": true,
-        "connectionType": "local",
-        "dataSource": "push",
-        "adminUI": {
-            "config": "json",
-            "custom": "json"
-        },
-        "localLinks": {
-            "_default": "%protocol%://%ip%:%port%/kiwi/%instance%/index.html"
-        },
-        "webExtension": "lib/web.js",
-        "supportCustoms": true,
-        "dependencies": [
-            {
-                "js-controller": ">=6.0.11"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=7.4.10"
-            }
-        ]
-    },
-    "native": {
-        "webInstance": "*",
-        "models": "gemini-2.5-flash-preview-05-20",
-        "embeddingModel": "gemini-embedding-exp-03-07",
-        "apiKey": "",
-        "temperature": 0.2,
-        "namespace": "kiwi.0",
-        "dataDir": "/opt/iobroker-data/kiwi.0",
-        "systemPrompt": "Your Name is Kiwi. You are a friendly assistant that can help control and maintain ioBroker Systems."
-    },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "chat",
-            "type": "channel",
-            "common": {
-                "name": "Chat_Interface"
-            },
-            "native": {}
-        },
-        {
-            "_id": "chat.prompt",
-            "type": "state",
-            "common": {
-                "role": "text",
-                "name": "promt",
-                "desc": "The prompt that is sent to the AI model for processing.",
-                "type": "string",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "chat.response",
-            "type": "state",
-            "common": {
-                "role": "text",
-                "name": "response",
-                "desc": "The response from the AI model.",
-                "type": "string",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "",
-            "type": "meta",
-            "common": {
-                "name": "Kiwi Adapter File Storage",
-                "type": "meta"
-            },
-            "native": {}
-        }
-    ]
+	"common": {
+		"messagebox": true,
+		"name": "kiwi",
+		"version": "0.4.0",
+		"news": {
+			"0.4.0": {
+				"en": "added file handling API; stability improvements and better error handling; config translations; bug fixes",
+				"de": "Dateibehandlungs -API hinzugefügt; Stabilitätsverbesserungen und bessere Fehlerbehandlung; Konfigurationsübersetzungen; Fehlerbehebungen",
+				"ru": "Добавлен API обработки файлов; Улучшения стабильности и лучшая обработка ошибок; переводы конфигурации; Исправления ошибок",
+				"pt": "API de manuseio de arquivos adicionada; melhorias de estabilidade e melhor manuseio de erros; traduções de configuração; Correções de bug",
+				"nl": "File Handling API toegevoegd; stabiliteitsverbeteringen en betere foutafhandeling; configuratieverhalingen; Bugfixes",
+				"fr": "API Ajout de l'API de gestion des fichiers; Améliorations de stabilité et meilleure gestion des erreurs; Traductions de configuration; correctifs de bugs",
+				"it": "API di gestione dei file aggiunta; miglioramenti della stabilità e una migliore gestione degli errori; traduzioni di configurazione; Correzioni di bug",
+				"es": "API de manejo de archivos agregado; mejoras de estabilidad y un mejor manejo de errores; traducciones de configuración; correcciones de errores",
+				"pl": "Dodano interfejs API obsługi plików; Ulepszenia stabilności i lepsze obsługi błędów; Tłumaczenia konfiguracyjne; poprawki błędów",
+				"uk": "Додано API обробки файлів; Поліпшення стабільності та краща обробка помилок; конфігурації конфігурації; виправлення помилок",
+				"zh-cn": "添加了文件处理API；稳定性改进和更好的错误处理；配置翻译；错误修复"
+			},
+			"0.3.0": {
+				"en": "Added filtering to the search tool; added a new tool to search the object database with mongoDB style queries",
+				"de": "Filterung zum Suchwerkzeug hinzugefügt; Fügte ein neues Tool hinzu, um die Objektdatenbank mit Abfragen im MongoDB -Stil zu durchsuchen",
+				"ru": "Добавлена ​​фильтрация в инструмент поиска; Добавлен новый инструмент для поиска базы данных объектов с запросами стиля MongoDB",
+				"pt": "Filtragem adicionada à ferramenta de pesquisa; Adicionou uma nova ferramenta para pesquisar o banco de dados de objetos com consultas de estilo MongoDBB",
+				"nl": "Filtering toegevoegd aan het zoektool; Een nieuwe tool toegevoegd om de objectdatabase te doorzoeken met query's in MongoDB -stijl",
+				"fr": "Ajout de filtrage à l'outil de recherche; Ajout d'un nouvel outil pour rechercher la base de données d'objets avec des requêtes de style MongoDB",
+				"it": "Filtro aggiunto allo strumento di ricerca; Aggiunto un nuovo strumento per cercare nel database degli oggetti con query in stile mongodb",
+				"es": "Filtrado agregado a la herramienta de búsqueda; Se agregó una nueva herramienta para buscar la base de datos de objetos con consultas de estilo MongoDB",
+				"pl": "Dodał filtrowanie do narzędzia wyszukiwania; Dodano nowe narzędzie do wyszukiwania bazy danych obiektowych z zapytaniami stylu MongoDB",
+				"uk": "Додано фільтрування до інструменту пошуку; Додано новий інструмент для пошуку в базі даних об'єктів за допомогою запитів у стилі MongoDB",
+				"zh-cn": "将过滤添加到搜索工具中；添加了一个新的工具来搜索使用MongoDB样式查询的对象数据库"
+			},
+			"0.1.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"uk": "Початкова версія",
+				"zh-cn": "首次出版"
+			},
+			"0.0.2": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"uk": "Початкова версія",
+				"zh-cn": "首次出版"
+			}
+		},
+		"titleLang": {
+			"en": "kiwi",
+			"de": "kiwi",
+			"ru": "kiwi",
+			"pt": "kiwi",
+			"nl": "kiwi",
+			"fr": "kiwi",
+			"it": "kiwi",
+			"es": "kiwi",
+			"pl": "kiwi",
+			"uk": "kiwi",
+			"zh-cn": "kiwi"
+		},
+		"desc": {
+			"en": "an MCP Server that controlls io-broker with AI from any MCP Client",
+			"de": "Ein MCP-Server, der IO-Broker mit KI von jedem MCP-Client steuert",
+			"ru": "MCP-сервер, который управляет IO-брокером с ИИ от любого клиента MCP",
+			"pt": "Um servidor MCP que controla o IO Broker com IA de qualquer cliente MCP",
+			"nl": "Een MCP-server die IO-makelaar met AI van elke MCP-client beheert",
+			"fr": "Un serveur MCP qui contrôle le courtier Io-Broker avec n'importe quel client MCP",
+			"it": "Un server MCP che controlla Io-broker con AI da qualsiasi client MCP",
+			"es": "Un servidor MCP que controla IO-Broker con AI desde cualquier cliente de MCP",
+			"pl": "serwer MCP, który kontroluje broker IO z AI od dowolnego klienta MCP",
+			"uk": "Сервер MCP, який контролює IO-брокер з AI від будь-якого клієнта MCP",
+			"zh-cn": "来自任何MCP客户端的AI控制IO-broker的MCP服务器"
+		},
+		"authors": ["Holger Will <h.will@klimapartner.de>"],
+		"keywords": ["LLM", "MCP", "AI", "Gemini"],
+		"licenseInformation": {
+			"type": "free",
+			"license": "MIT"
+		},
+		"platform": "Javascript/Node.js",
+		"icon": "kiwi-logo.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/Holger-Will/ioBroker.kiwi/main/admin/kiwi-logo.png",
+		"readme": "https://github.com/Holger-Will/ioBroker.kiwi/blob/main/README.md",
+		"loglevel": "info",
+		"tier": 3,
+		"mode": "daemon",
+		"type": "visualization",
+		"compact": true,
+		"connectionType": "local",
+		"dataSource": "push",
+		"adminUI": {
+			"config": "json",
+			"custom": "json"
+		},
+		"localLinks": {
+			"_default": "%protocol%://%ip%:%port%/kiwi/%instance%/index.html"
+		},
+		"webExtension": "lib/web.js",
+		"supportCustoms": true,
+		"dependencies": [
+			{
+				"js-controller": ">=6.0.11"
+			}
+		],
+		"globalDependencies": [
+			{
+				"admin": ">=7.4.10"
+			}
+		]
+	},
+	"native": {
+		"webInstance": "*",
+		"models": "gemini-2.5-flash-preview-05-20",
+		"embeddingModel": "gemini-embedding-exp-03-07",
+		"apiKey": "",
+		"temperature": 0.2,
+		"namespace": "kiwi.0",
+		"dataDir": "/opt/iobroker-data/kiwi.0",
+		"systemPrompt": "Your Name is Kiwi. You are a friendly assistant that can help control and maintain ioBroker Systems."
+	},
+	"objects": [],
+	"instanceObjects": [
+		{
+			"_id": "info",
+			"type": "channel",
+			"common": {
+				"name": "Information"
+			},
+			"native": {}
+		},
+		{
+			"_id": "info.connection",
+			"type": "state",
+			"common": {
+				"role": "indicator.connected",
+				"name": "Device or service connected",
+				"type": "boolean",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "chat",
+			"type": "channel",
+			"common": {
+				"name": "Chat_Interface"
+			},
+			"native": {}
+		},
+		{
+			"_id": "chat.prompt",
+			"type": "state",
+			"common": {
+				"role": "text",
+				"name": "promt",
+				"desc": "The prompt that is sent to the AI model for processing.",
+				"type": "string",
+				"read": true,
+				"write": true
+			},
+			"native": {}
+		},
+		{
+			"_id": "chat.response",
+			"type": "state",
+			"common": {
+				"role": "text",
+				"name": "response",
+				"desc": "The response from the AI model.",
+				"type": "string",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "",
+			"type": "meta",
+			"common": {
+				"name": "Kiwi Adapter File Storage",
+				"type": "meta"
+			},
+			"native": {}
+		}
+	]
 }
