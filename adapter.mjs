@@ -78,6 +78,7 @@ class McpServer extends utils.Adapter {
 		});
 		// Initialize
 		await this.chatbot.init();
+		//const api = this.chatbot.API
 	}
 
 	async onStateChange(id, state) {
