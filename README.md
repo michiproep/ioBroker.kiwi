@@ -1,5 +1,6 @@
 # ioBroker.kiwi
 
+[![Downloads](https://img.shields.io/npm/dm/iobroker.kiwi.svg)](https://www.npmjs.com/package/iobroker.kiwi) - [![Test and Release](https://github.com/Holger-Will/ioBroker.kiwi/actions/workflows/test-and-release.yml/badge.svg)](https://github.com/Holger-Will/ioBroker.kiwi/actions/workflows/test-and-release.yml)
 **Beta version. need more testing!**
 
 ## Connecting
