@@ -84,7 +84,6 @@ class McpServer extends utils.Adapter {
 		this.log.info(`[Kiwi Adapter] State changed: ${id} to ${state.val}`);
 		if (state && !state.ack) {
 			const stateName = id.replace(`${this.namespace}.`, "");
-			//this.log.info(`Ack: ${stateName} to ${state.val}`);
 			if (stateName === "chat.prompt") {
 				const response = await this.chatbot?.prompt(state.val);
 				this.setState("chat.response", {
