@@ -1,9 +1,6 @@
 # ioBroker.kiwi
 
-**ATTENTION! Early alpha**
-
-- limited functionality
-- Expect things to break.
+**Beta version. need more testing!**
 
 ## Connecting
 
@@ -88,6 +85,7 @@ there are other tools the bot can use like setState, getState, setObject, getObj
 
 - **getObject.mjs** – Get a single ioBroker object by ID.
 - **setObject.mjs** – Edit or create objects in ioBroker.
+- **deleteObject.mjs** – Delete any ioBroker object (device, channel, state, or folder).
 - **getState.mjs** – Get the value of a state by ID.
 - **getStateBulk.mjs** – Get values of multiple states at once.
 - **setState.mjs** – Set the value of a state.
@@ -95,8 +93,18 @@ there are other tools the bot can use like setState, getState, setObject, getObj
 - ~~**createState.mjs** – Create a new ioBroker state object.~~
 - **getAllRooms.mjs** – List all valid rooms and areas.
 - **getHistory.mjs** – Retrieve historical state data (time series, trends).
-- ~~**getAdapters.mjs** – List all installed adapters in the system.~~
+- **getAdapters.mjs** – List all installed adapters in the system.
 - ~~**getInstances.mjs** – List all running adapter instances.~~
+
+### file handling
+
+- **readDir.mjs** – Read the contents of a directory in the ioBroker file system.
+- **readFile.mjs** – Read the contents of a file in the ioBroker file system.
+- **writeFile.mjs** – Write content to a file in the ioBroker file system.
+- **fileExists.mjs** – Check if a file exists in the ioBroker file system.
+- **mkdir.mjs** – Create a new directory in the ioBroker file system.
+- **renameFile.mjs** – Rename a file or directory in the ioBroker file system.
+- **deleteFile.mjs** – Delete a file in the ioBroker file system.
 
 ## Basic Authentication
 
@@ -123,7 +131,15 @@ console.log(Buffer.from("username:password").toString("base64"))
 
 ## Changelog
 
-Not much here yet. Still early alpha. Consider this the first release.
+### v0.4.0
+
+- translations
+- improve jsonConfig.json
+- make mingoSearch find all object types
+- reimplement getAdapters
+- added file handling
+- serve user files to web
+- implemented deleteObject
 
 ## License
 

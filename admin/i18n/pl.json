@@ -1,5 +1,15 @@
 {
-    "mcp-server adapter settings": "Ustawienia adaptera dla mcp-server",
-    "option1": "opcja 1",
-    "option2": "opcja2"
+    "Description": "Opis",
+    "Describe this device-state, its purpose, and location. This description will be used for the semantic search feature. It is language-agnostic: you can describe it in any language, and search in any other language.": "Opisz ten stan urządzenia, jego cel i lokalizację. Ten opis zostanie użyty do funkcji wyszukiwania semantycznego. Jest to języka-agnostyka: możesz to opisać w dowolnym języku i wyszukiwać w dowolnym innym języku.",
+    "Server Settings": "Ustawienia serwera",
+    "Instance of Web Adapter": "Instancja adaptera internetowego",
+    "Select the instance of the web adapter to use for the chat client.": "Wybierz instancję adaptera internetowego do użycia dla klienta CHAT.",
+    "Google Gemini API Key": "Klucz API Google Gemini",
+    "Enter your API key here": "Wprowadź swój klucz API tutaj",
+    "Select Language Model": "Wybierz model języka",
+    "Chat Settings": "Ustawienia czatu",
+    "System Prompt": "System monit",
+    "the system prompt for the integrated chat client.": "System monit o zintegrowanego klienta czatu.",
+    "temperature": "temperatura",
+    "the 'randomness' or 'creativeness' of the response": "„losowość” lub „kreatywność” odpowiedzi"
 }

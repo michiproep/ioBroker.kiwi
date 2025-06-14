@@ -1,6 +1,15 @@
 {
-	"mcp-server adapter settings": "Adapter settings for mcp-server",
-	"option1": "option1",
-	"option2": "option2",
-	"description": "Description"
+	"Description": "Description",
+	"Describe this device-state, its purpose, and location. This description will be used for the semantic search feature. It is language-agnostic: you can describe it in any language, and search in any other language.": "Describe this device-state, its purpose, and location. This description will be used for the semantic search feature. It is language-agnostic: you can describe it in any language, and search in any other language.",
+	"Server Settings": "Server Settings",
+	"Instance of Web Adapter": "Instance of Web Adapter",
+	"Select the instance of the web adapter to use for the chat client.": "Select the instance of the web adapter to use for the chat client.",
+	"Google Gemini API Key": "Google Gemini API Key",
+	"Enter your API key here": "Enter your API key here",
+	"Select Language Model": "Select Language Model",
+	"Chat Settings": "Chat Settings",
+	"System Prompt": "System Prompt",
+	"the system prompt for the integrated chat client.": "the system prompt for the integrated chat client.",
+	"temperature": "temperature",
+	"the 'randomness' or 'creativeness' of the response": "the 'randomness' or 'creativeness' of the response"
 }

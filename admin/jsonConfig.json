@@ -1,4 +1,5 @@
 {
+	"i18n": true,
 	"type": "tabs",
 	"items": {
 		"ServerSettings": {
@@ -11,19 +12,31 @@
 					"adapter": "web",
 					"tooltip": "Select the instance of the web adapter to use for the chat client.",
 					"all": true,
-					"sm": 6
+					"xs": 6,
+					"sm": 6,
+					"md": 6,
+					"lg": 6,
+					"xl": 6
 				},
 				"apiKey": {
 					"type": "text",
 					"label": "Google Gemini API Key",
-					"tooltip": "Enter your API key here (required to fetch models).",
-					"sm": 12
+					"tooltip": "Enter your API key here",
+					"xs": 12,
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"xl": 12
 				},
 				"models": {
 					"type": "selectSendTo",
 					"command": "getGeminiModels",
 					"label": "Select Language Model",
-					"sm": 6
+					"xs": 6,
+					"sm": 6,
+					"md": 6,
+					"lg": 6,
+					"xl": 6
 				}
 			}
 		},
@@ -36,15 +49,24 @@
 					"label": "System Prompt",
 					"tooltip": "the system prompt for the integrated chat client.",
 					"minRows": 6,
-					"sm": 12
+					"xs": 12,
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"xl": 12
 				},
 				"temperature": {
 					"type": "number",
 					"min": 0,
 					"max": 2,
 					"step": 0.1,
-					"label": "temperature. the 'randomness' or 'creativeness' of the response",
-					"sm": 4
+					"label": "Temperature",
+					"tooltip": "the 'randomness' or 'creativeness' of the response",
+					"xs": 4,
+					"sm": 4,
+					"md": 4,
+					"lg": 4,
+					"xl": 4
 				}
 			}
 		}

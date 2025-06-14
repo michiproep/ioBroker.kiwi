@@ -1,13 +1,16 @@
 {
-	"i18n": true,
 	"type": "panel",
 	"items": {
 		"description": {
 			"type": "text",
-			"label": "Description",
+			"label": { "en": "Description" },
 			"newLine": true,
+			"xs": 12,
 			"sm": 12,
-			"help": "This is a help text for the custom text setting.",
+			"md": 12,
+			"lg": 12,
+			"xl": 12,
+			"help": "Describe the state, its purpose, and location. This description will be used for the semantic search feature. It is language-agnostic: you can describe it in any language, and search in any other language.",
 			"minRows": 4
 		}
 	}
