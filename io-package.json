@@ -2,8 +2,21 @@
     "common": {
         "messagebox": true,
         "name": "kiwi",
-        "version": "0.4.1",
+        "version": "0.4.2",
         "news": {
+            "0.4.2": {
+                "en": "bugfix: await getHistory call",
+                "de": "Bugfix: Warten Sie Gethistory Call",
+                "ru": "Bugfix: wat Gethistory Call",
+                "pt": "Bugfix: Aguarda de chamada Gethistory",
+                "nl": "Bugfix: wacht op Gethistory Call",
+                "fr": "Bugfix: attendre l'appel de gethistory",
+                "it": "Bugfix: Aspetta la chiamata di getistoria",
+                "es": "Bugfix: espera Gethistory Call",
+                "pl": "Bugfix: Czekaj na getistory Call",
+                "uk": "Bugfix: Чекай гетісторія дзвінка",
+                "zh-cn": "bugfix：等待奇特的电话"
+            },
             "0.4.1": {
                 "en": "added file handling API; stability improvements and better error handling; config translations; bug fixes",
                 "de": "Dateibehandlungs -API hinzugefügt; Stabilitätsverbesserungen und bessere Fehlerbehandlung; Konfigurationsübersetzungen; Fehlerbehebungen",

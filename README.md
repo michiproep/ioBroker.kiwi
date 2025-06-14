@@ -132,6 +132,10 @@ console.log(Buffer.from("username:password").toString("base64"))
 
 ## Changelog
 
+### v0.4.2
+
+- bugfix: await getHistory call
+
 ### v0.4.1
 
 - translations
