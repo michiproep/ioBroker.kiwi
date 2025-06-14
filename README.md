@@ -131,7 +131,7 @@ console.log(Buffer.from("username:password").toString("base64"))
 
 ## Changelog
 
-### v0.4.0
+### v0.4.1
 
 - translations
 - improve jsonConfig.json
