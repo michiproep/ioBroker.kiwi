@@ -17,19 +17,6 @@
 				"uk": "Додано API обробки файлів; Поліпшення стабільності та краща обробка помилок; конфігурації конфігурації; виправлення помилок",
 				"zh-cn": "添加了文件处理API；稳定性改进和更好的错误处理；配置翻译；错误修复"
 			},
-			"0.3.0": {
-				"en": "Added filtering to the search tool; added a new tool to search the object database with mongoDB style queries",
-				"de": "Filterung zum Suchwerkzeug hinzugefügt; Fügte ein neues Tool hinzu, um die Objektdatenbank mit Abfragen im MongoDB -Stil zu durchsuchen",
-				"ru": "Добавлена ​​фильтрация в инструмент поиска; Добавлен новый инструмент для поиска базы данных объектов с запросами стиля MongoDB",
-				"pt": "Filtragem adicionada à ferramenta de pesquisa; Adicionou uma nova ferramenta para pesquisar o banco de dados de objetos com consultas de estilo MongoDBB",
-				"nl": "Filtering toegevoegd aan het zoektool; Een nieuwe tool toegevoegd om de objectdatabase te doorzoeken met query's in MongoDB -stijl",
-				"fr": "Ajout de filtrage à l'outil de recherche; Ajout d'un nouvel outil pour rechercher la base de données d'objets avec des requêtes de style MongoDB",
-				"it": "Filtro aggiunto allo strumento di ricerca; Aggiunto un nuovo strumento per cercare nel database degli oggetti con query in stile mongodb",
-				"es": "Filtrado agregado a la herramienta de búsqueda; Se agregó una nueva herramienta para buscar la base de datos de objetos con consultas de estilo MongoDB",
-				"pl": "Dodał filtrowanie do narzędzia wyszukiwania; Dodano nowe narzędzie do wyszukiwania bazy danych obiektowych z zapytaniami stylu MongoDB",
-				"uk": "Додано фільтрування до інструменту пошуку; Додано новий інструмент для пошуку в базі даних об'єктів за допомогою запитів у стилі MongoDB",
-				"zh-cn": "将过滤添加到搜索工具中；添加了一个新的工具来搜索使用MongoDB样式查询的对象数据库"
-			},
 			"0.1.1": {
 				"en": "initial release",
 				"de": "Erstveröffentlichung",
