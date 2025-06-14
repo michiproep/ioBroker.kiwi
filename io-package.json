@@ -2,9 +2,9 @@
 	"common": {
 		"messagebox": true,
 		"name": "kiwi",
-		"version": "0.4.0",
+		"version": "0.4.1",
 		"news": {
-			"0.4.0": {
+			"0.4.1": {
 				"en": "added file handling API; stability improvements and better error handling; config translations; bug fixes",
 				"de": "Dateibehandlungs -API hinzugefügt; Stabilitätsverbesserungen und bessere Fehlerbehandlung; Konfigurationsübersetzungen; Fehlerbehebungen",
 				"ru": "Добавлен API обработки файлов; Улучшения стабильности и лучшая обработка ошибок; переводы конфигурации; Исправления ошибок",
