@@ -1,0 +1,15 @@
+{
+    "Description": "Опис",
+    "Describe this device-state, its purpose, and location. This description will be used for the semantic search feature. It is language-agnostic: you can describe it in any language, and search in any other language.": "Охарактеризуйте цей пристрій, його призначення та місце розташування. Цей опис буде використаний для функції семантичного пошуку. Це мова-агностик: ви можете описати його будь-якою мовою та шукати будь-якою іншою мовою.",
+    "Server Settings": "Налаштування сервера",
+    "Instance of Web Adapter": "Примірник веб -адаптера",
+    "Select the instance of the web adapter to use for the chat client.": "Виберіть екземпляр веб -адаптера для використання для клієнта чату.",
+    "Google Gemini API Key": "Google Gemini API ключ",
+    "Enter your API key here": "Введіть тут свій ключ API",
+    "Select Language Model": "Виберіть мову модель",
+    "Chat Settings": "Налаштування чату",
+    "System Prompt": "Система підказка",
+    "the system prompt for the integrated chat client.": "Система підказка для інтегрованого клієнта чату.",
+    "temperature": "температура",
+    "the 'randomness' or 'creativeness' of the response": "\"випадковість\" або \"творчість\" відповіді"
+}
