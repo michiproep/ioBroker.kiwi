@@ -10,10 +10,9 @@
 	"servers": {
 		"iobroker-remote": {
 			"type": "http",
-			"url": "http://localhost:8082/kiwi/0/mcp",
+			"url": "http://192.168.178.38:8082/kiwi/0/mcp",
 			"headers": {
-				"cache-control": "no-cache",
-				"authorization": "Basic ${input:base64EncodedAuth}"
+				"cache-control": "no-cache"
 			}
 		}
 	}
