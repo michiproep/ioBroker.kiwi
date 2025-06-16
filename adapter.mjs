@@ -35,7 +35,8 @@ class McpServer extends utils.Adapter {
 			this.log.error(`[Kiwi Adapter] Failed to create data directory: ${e.message}`);
 		}
 		if (this.config.dataDir !== newPath) {
-			try {
+			this.updateConfig({ dataDir: newPath, namespace: this.namespace });
+			/* try {
 				// 1. Get the current instance object
 				const instanceObj = await this.getForeignObjectAsync(`system.adapter.${this.namespace}`);
 
@@ -52,7 +53,7 @@ class McpServer extends utils.Adapter {
 				}
 			} catch (e) {
 				this.log.error(`Error updating configuration: ${e.message}`);
-			}
+			} */
 		}
 		this.vectorDB = new VectorDB({
 			apiKey: this.config.apiKey,
