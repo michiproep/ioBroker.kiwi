@@ -37,6 +37,16 @@
 					"md": 6,
 					"lg": 6,
 					"xl": 6
+				},
+				"webhookUrl": {
+					"type": "text",
+					"label": "Webhook URL",
+					"tooltip": "Enter the webhook URL to send data to",
+					"xs": 12,
+					"sm": 6,
+					"md": 6,
+					"lg": 6,
+					"xl": 6
 				}
 			}
 		},

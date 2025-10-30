@@ -57,6 +57,7 @@ class McpServer extends utils.Adapter {
 		}
 		this.vectorDB = new VectorDB({
 			apiKey: this.config.apiKey,
+			webhookUrl: this.config.webhookUrl,
 			embeddingModel: this.config.embeddingModel || "gemini-embedding-exp-03-07",
 			dimensionality: 768,
 			namespace: this.namespace,
