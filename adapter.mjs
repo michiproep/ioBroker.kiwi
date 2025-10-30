@@ -21,6 +21,7 @@ class McpServer extends utils.Adapter {
 		this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
 		this.vectorDB = null;
+		this._indexedObjects = new Map();
 	}
 
 	async onReady() {
@@ -130,34 +131,49 @@ class McpServer extends utils.Adapter {
 	}
 
 	async onObjectChange(id, obj) {
-		if (
-			obj &&
-			obj.common &&
-			obj.common.custom &&
-			obj.common.custom[this.namespace] &&
-			obj.common.custom[this.namespace].enabled == true &&
-			obj.common.custom[this.namespace].description &&
-			obj.type == "state"
-		) {
-			if (this.vectorDB) {
-				this.vectorDB.write(id, obj.common.custom[this.namespace].description, obj);
-				this.log.info(`[Kiwi Adapter] State Indexed ${id} has ${this.namespace} custom setting.`);
-			} else {
-				this.log.warn(`[Kiwi Adapter] vectorDB is not initialized. Cannot write to index for ${id}.`);
-			}
-		} else {
-			try {
-				if (this.vectorDB) {
+		try {
+			// Deleted object
+			if (!obj) {
+				const prev = this._indexedObjects.get(id);
+				if (prev && prev.enabled && this.vectorDB) {
 					await this.vectorDB.deleteItem(id);
-				} else {
-					this.log.warn(`[Kiwi Adapter] vectorDB is not initialized. Cannot delete item for ${id}.`);
+					this.log.info(`[Kiwi Adapter] Object deleted; removed from index: ${id}`);
 				}
-			} catch (e) {
-				this.log.error(`[Kiwi Adapter] Error deleting item from index: ${id} - ${e.message}`);
+				this._indexedObjects.delete(id);
+				return;
 			}
-			/* this.adapter.log.info(
-				`[State Not Indexed] ${this.namespace} ${id} has ${JSON.stringify(obj.common.custom)} `,
-			); */
+
+			const nsCustom = obj.common && obj.common.custom && obj.common.custom[this.namespace];
+			const enabled = !!(nsCustom && nsCustom.enabled);
+			const description = nsCustom && nsCustom.description ? String(nsCustom.description) : null;
+			const prev = this._indexedObjects.get(id) || { enabled: null, description: null };
+
+			// Nothing changed with respect to our indexing-relevant fields
+			if (prev.enabled === enabled && prev.description === description) {
+				this.log.debug(`[Kiwi Adapter] No index-relevant change for ${id}`);
+				return;
+			}
+
+			// If enabled + description present -> write/update index
+			if (enabled && description && obj.type === "state") {
+				if (this.vectorDB) {
+					await this.vectorDB.write(id, description, obj);
+					this.log.info(`[Kiwi Adapter] State Indexed ${id} (updated).`);
+				} else {
+					this.log.warn(`[Kiwi Adapter] vectorDB not initialized; cannot write index for ${id}.`);
+				}
+				this._indexedObjects.set(id, { enabled, description });
+				return;
+			}
+
+			// Otherwise remove from index if it was previously indexed
+			if (prev.enabled && this.vectorDB) {
+				await this.vectorDB.deleteItem(id);
+				this.log.info(`[Kiwi Adapter] Removed from index: ${id}`);
+			}
+			this._indexedObjects.set(id, { enabled, description });
+		} catch (e) {
+			this.log.error(`[Kiwi Adapter] Error handling object change for ${id}: ${e.message}`);
 		}
 	}
 	//If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.

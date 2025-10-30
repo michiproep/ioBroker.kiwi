@@ -2,7 +2,7 @@
     "common": {
         "messagebox": true,
         "name": "kiwi",
-        "version": "0.4.2",
+        "version": "0.4.3",
         "news": {
             "0.4.2": {
                 "en": "bugfix: await getHistory call",
