@@ -29,6 +29,18 @@ class McpServer extends utils.Adapter {
 		const newPath = utils.getAbsoluteInstanceDataDir(this);
 		// Ensure the directory exists, including all ancestors
 
+		//add all objects with custom.kiwi.description to the index
+		const objects = await this.adapter.getForeignObjectsAsync("*");
+		for (const [id, obj] of Object.entries(objects)) {
+			try {
+				if (obj && obj.common && obj.common.custom && obj.common.custom[this.namespace]) {
+					this._indexedObjects.set(id, obj);
+				}
+			} catch (e) {
+				this.log.error(`[Kiwi Adapter] Error indexing object ${id}: ${e.message}`);
+			}
+		}
+
 		try {
 			await import("fs/promises").then((fs) => fs.mkdir(newPath, { recursive: true }));
 			this.log.info(`[Kiwi Adapter] Ensured data directory exists: ${newPath}`);
