@@ -150,7 +150,7 @@ class McpServer extends utils.Adapter {
 
 			// Nothing changed with respect to our indexing-relevant fields
 			if (prev.enabled === enabled && prev.description === description) {
-				this.log.trace(`[Kiwi Adapter] No index-relevant change for ${id}`);
+				//this.log.(`[Kiwi Adapter] No index-relevant change for ${id}`);
 				return;
 			}
 
