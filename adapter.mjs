@@ -33,9 +33,11 @@ class McpServer extends utils.Adapter {
 		const objects = await this.adapter.getForeignObjectsAsync("*");
 		for (const [id, obj] of Object.entries(objects)) {
 			try {
-				if (obj && obj.common && obj.common.custom && obj.common.custom[this.namespace]) {
-					this._indexedObjects.set(id, obj);
-				}
+				const nsCustom = obj && obj.common && obj.common.custom && obj.common.custom[this.namespace];
+				const enabled = !!(nsCustom && nsCustom.enabled);
+				const description = nsCustom && nsCustom.description ? String(nsCustom.description) : null;
+				// store normalized shape expected by onObjectChange
+				this._indexedObjects.set(id, { enabled, description, type: obj?.type || null });
 			} catch (e) {
 				this.log.error(`[Kiwi Adapter] Error indexing object ${id}: ${e.message}`);
 			}
