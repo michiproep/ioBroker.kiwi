@@ -172,7 +172,7 @@ class McpServer extends utils.Adapter {
 			if (enabled && description && obj.type === "state") {
 				if (this.vectorDB) {
 					await this.vectorDB.write(id, description, obj);
-					this.log.info(`[Kiwi Adapter] State Indexed ${id} (updated).`);
+					this.log.info(`[Kiwi Adapter] State Indexed ${id} (updated): ${description}`);
 				} else {
 					this.log.warn(`[Kiwi Adapter] vectorDB not initialized; cannot write index for ${id}.`);
 				}
