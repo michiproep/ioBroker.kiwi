@@ -30,7 +30,7 @@ class McpServer extends utils.Adapter {
 		// Ensure the directory exists, including all ancestors
 
 		//add all objects with custom.kiwi.description to the index
-		const objects = await this.adapter.getForeignObjectsAsync("*");
+		const objects = await this.getForeignObjectsAsync("*");
 		for (const [id, obj] of Object.entries(objects)) {
 			try {
 				const nsCustom = obj && obj.common && obj.common.custom && obj.common.custom[this.namespace];
