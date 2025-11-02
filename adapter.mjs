@@ -1,6 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 import { Chatbot } from "./lib/chatbot.mjs";
 import { VectorDB } from "./lib/sqlite-vectorize.mjs";
+import { OpenAiVectorDB } from "./lib/openai-sqlite-vectorize.mjs";
+import { PGOpenAiVectorDB } from "./lib/openai-postgres-vectorize.mjs";
 // eslint-disable-next-line
 import * as utils from "@iobroker/adapter-core";
 
@@ -70,11 +72,16 @@ class McpServer extends utils.Adapter {
 				this.log.error(`Error updating configuration: ${e.message}`);
 			} */
 		}
-		this.vectorDB = new VectorDB({
+		// this.vectorDB = new VectorDB({
+		// 	apiKey: this.config.apiKey,
+		// 	webhookUrl: this.config.webhookUrl,
+		// 	embeddingModel: this.config.embeddingModel || "gemini-embedding-exp-03-07",
+		// 	dimensionality: 768,
+		// 	namespace: this.namespace,
+		// 	dbPath: this.config.dataDir,
+		// });
+		this.vectorDB = new OpenAiVectorDB({
 			apiKey: this.config.apiKey,
-			webhookUrl: this.config.webhookUrl,
-			embeddingModel: this.config.embeddingModel || "gemini-embedding-exp-03-07",
-			dimensionality: 768,
 			namespace: this.namespace,
 			dbPath: this.config.dataDir,
 		});
