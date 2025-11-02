@@ -25,6 +25,7 @@
   "dependencies": {
     "@google/genai": "^1.4.0",
     "openai": "^4.5.0",
+    "pg": "^8.10.0",
     "@iobroker/adapter-core": "^3.2.3",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "better-sqlite3": "^11.10.0",
