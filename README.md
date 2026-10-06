@@ -10,9 +10,16 @@ and semantic search over your states.
 > **Fork notice:** this is a maintained fork of the no longer maintained
 > [Holger-Will/ioBroker.kiwi](https://github.com/Holger-Will/ioBroker.kiwi). The npm package `iobroker.kiwi`
 > (0.4.2) is still the upstream version. Releases of this fork are published as
-> [GitHub releases](https://github.com/michiproep/ioBroker.kiwi/releases); install them in ioBroker via
-> _Adapters → Install from custom URL_ with `https://github.com/michiproep/ioBroker.kiwi/tarball/<tag>`.
+> [GitHub releases](https://github.com/michiproep/ioBroker.kiwi/releases).
 > See [CONTRIBUTING.md](CONTRIBUTING.md) for the branching and release process.
+
+## Requirements
+
+- Node.js >= 22, js-controller >= 6.0.11, admin >= 7.6.20 and a web adapter instance (serves the MCP endpoint)
+- 64-bit system (x64 or arm64; Linux, Windows or macOS). 32-bit ARM (for example Raspberry Pi OS 32-bit) is not
+  supported, because the native module `sqlite-vec` has no build for it.
+- An API key, see [AI and vector store integration status](#ai-and-vector-store-integration-status). Without a key the
+  adapter starts, but semantic search and the chat bot are disabled.
 
 ## Connecting
 
@@ -86,32 +93,33 @@ there are other tools the bot can use like setState, getState, setObject, getObj
 
 ## AI and vector store integration status
 
-Several ways of connecting AI models and vector stores have been tried. Only one combination is wired up; the others
-exist as code but are **not active**. Switching between them currently requires a code change in `adapter.mjs` and
-`lib/api_adapter.mjs` (and deleting the old vector database file, because the vector dimension differs).
+Choose the **AI provider** in the instance settings. The API key must belong to the selected provider; it is used for
+the integrated chat bot **and** for the embeddings of the semantic search.
 
-| Area                                                  | Implementation                                                                                                                                                         | Status                                                                                                                                                                                                                    |
-| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| MCP server (HTTP, streamable)                         | `lib/mcp-web.mjs`, served by the **web adapter** at `/kiwi/<instance>/mcp`                                                                                             | **active**                                                                                                                                                                                                                |
-| Integrated chat bot (`chat.prompt` / `chat.response`) | Google Gemini via `@google/genai`, tools passed through an in-process MCP client (`lib/chatbot.mjs`)                                                                   | **active** (see known issue below)                                                                                                                                                                                        |
-| Semantic state search – embeddings + store            | OpenAI `text-embedding-3-large` (3072 dims) + SQLite with `sqlite-vec`, file `openai_vector_store.sqlite` in the instance data dir (`lib/openai-sqlite-vectorize.mjs`) | **active**                                                                                                                                                                                                                |
-| Object search                                         | MongoDB-style queries over all ioBroker objects with `mingo` (`mingoSearch` tool, also used as filter for semantic search results)                                     | **active**                                                                                                                                                                                                                |
-| Gemini embeddings + SQLite                            | `gemini-embedding-exp-03-07` (768 dims) + `sqlite-vec`, file `vector_store.sqlite` (`lib/sqlite-vectorize.mjs`, the original upstream implementation)                  | prepared, not used (commented out); the experimental model name is outdated                                                                                                                                               |
-| OpenAI embeddings + Postgres                          | `pgvector` table `iobroker_vector_store` (`lib/openai-postgres-vectorize.mjs`)                                                                                         | prepared, not used: imported but never instantiated, no admin settings, connection string only from `DATABASE_URL` or a hard-coded default. The ivfflat index cannot be created for 3072 dimensions (pgvector limit 2000) |
-| Webhook on index write                                | `Webhook URL` field in the instance settings, code in `lib/sqlite-vectorize.mjs`                                                                                       | prepared, not functional: the field is saved but the code is commented out                                                                                                                                                |
-| `vectra` (local file-based vector index)              | listed in `package.json`                                                                                                                                               | not used anywhere                                                                                                                                                                                                         |
-| Web chat UI                                           | `lib/public/` (`/kiwi/<instance>/index.html`)                                                                                                                          | prepared, not functional: the page sends messages over socket.io but nothing in the adapter answers them                                                                                                                  |
-| `embeddingModel` setting                              | `native.embeddingModel` in io-package.json                                                                                                                             | ignored by the active OpenAI store (model is fixed in code)                                                                                                                                                               |
+| Setting      | OpenAI (default)                                      | Google Gemini                                  |
+| ------------ | ----------------------------------------------------- | ---------------------------------------------- |
+| Chat model   | selectable, default `gpt-5-mini` (Responses API)      | selectable, default `gemini-2.5-flash`         |
+| Embeddings   | `text-embedding-3-large` (3072 dims)                  | `gemini-embedding-001` (768 dims)              |
+| Vector store | `openai_vector_store.sqlite` in the instance data dir | `vector_store.sqlite` in the instance data dir |
 
-**Known issue:** the instance setting _"Google Gemini API Key"_ (`apiKey`) is passed both to Gemini (chat bot and model
-list) and to OpenAI (embeddings). A single key cannot work for both providers:
+The model dropdown lists the models of the selected provider (enter the key first). Leave it empty to use the default.
+Each provider has its own vector store file. After switching the provider, the adapter adds all described states that
+are missing in the new store on startup, so nothing has to be deleted by hand.
 
-- With an **OpenAI key**, the MCP server and the semantic search work, but the integrated chat bot and the model
-  dropdown in the settings fail.
-- With a **Gemini key**, the chat bot works, but indexing descriptions and the semantic `searchIobrokerStates` tool fail.
+Overview of what is active and what is only prepared:
 
-Using an external MCP client (Claude Desktop, VS Code, …) together with an OpenAI key is the setup that currently works
-end to end.
+| Area                                                  | Implementation                                                                                                                                            | Status                                                                                                                                                                                                                                              |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MCP server (HTTP, streamable)                         | `lib/mcp-web.mjs`, served by the **web adapter** at `/kiwi/<instance>/mcp`                                                                                | **active**                                                                                                                                                                                                                                          |
+| Integrated chat bot (`chat.prompt` / `chat.response`) | `lib/chatbot.mjs` + `lib/chat-engines.mjs`: OpenAI (function calling) or Gemini (`mcpToTool`), tools passed through an in-process MCP client              | **active**                                                                                                                                                                                                                                          |
+| Semantic state search                                 | OpenAI or Gemini embeddings + SQLite with `sqlite-vec` (`lib/openai-sqlite-vectorize.mjs`, `lib/sqlite-vectorize.mjs`, selected in `lib/ai-provider.mjs`) | **active**                                                                                                                                                                                                                                          |
+| Object search                                         | MongoDB-style queries over all ioBroker objects with `mingo` (`mingoSearch` tool, also used as filter for semantic search results)                        | **active**                                                                                                                                                                                                                                          |
+| OpenAI embeddings + Postgres                          | `pgvector` table `iobroker_vector_store` (`lib/openai-postgres-vectorize.mjs`)                                                                            | prepared, not used: never instantiated, no admin settings, connection string only via constructor option (hard-coded default `postgres://homeserver1:5432/postgres`). The ivfflat index cannot be created for 3072 dimensions (pgvector limit 2000) |
+| Webhook on index write                                | `Webhook URL` field in the instance settings, code in `lib/sqlite-vectorize.mjs`                                                                          | prepared, not functional: the field is saved but the code is commented out                                                                                                                                                                          |
+| Web chat UI                                           | `lib/public/` (`/kiwi/<instance>/index.html`)                                                                                                             | prepared, not functional: the page sends messages over socket.io but nothing in the adapter answers them                                                                                                                                            |
+
+Using an external MCP client (Claude Desktop, VS Code, …) works with either provider; the provider is then only used
+for the semantic search embeddings.
 
 ## MCP Tools
 
@@ -121,7 +129,7 @@ Tool names as the MCP client sees them (source file in brackets).
 - **describe** (`describe.mjs`) – Set a description for a single object (enables semantic search).
 - **describeBulk** (`describeBulk.mjs`) – Set descriptions for multiple objects at once.
 - **deleteItemFromIndex** (`deleteItemFromIndex.mjs`) – Remove an item from the semantic search index.
-- **mingoSearch** (`mingo.js`) – Search the object database with MongoDB-style queries.
+- **mingoSearch** (`mingo.mjs`) – Search the object database with MongoDB-style queries.
 
 ### low level functions
 
@@ -185,6 +193,12 @@ console.log(Buffer.from("username:password").toString("base64"))
 ### **WORK IN PROGRESS**
 
 - (michiproep) documented the AI and vector store integration status, branching and release process
+- (michiproep) **Breaking:** Node.js >= 22 and admin >= 7.6.20 required
+- (michiproep) dependencies updated (Gemini SDK 2, OpenAI SDK 7, better-sqlite3 12.11, MCP SDK 1.32, zod 4, mingo 7)
+- (michiproep) fix: adapter no longer crashes in a loop when no API key is configured
+- (michiproep) CI: tests on Node.js 22/24/26, GitHub release on tag, new Dependabot auto-merge workflow
+- (michiproep) new setting **AI provider** (OpenAI default, Google Gemini): the API key is used for chat and embeddings of the selected provider; model list per provider; OpenAI chat with tool calling
+- (michiproep) fix: the MCP endpoint (web extension) now decrypts the stored API key
 
 ### 0.4.2
 
