@@ -140,7 +140,8 @@ Tool names as the MCP client sees them (source file in brackets).
 - **setState** (`setState.mjs`) – Set the value of a state.
 - **setStateBulk** (`setStateBulk.mjs`) – Set multiple state values at once.
 - **getAllRooms** (`getAllRooms.mjs`) – List all valid rooms and areas.
-- **getHistory** (`getHistory.mjs`) – Retrieve historical state data (time series, trends).
+- **getHistory** (`getHistory.mjs`) – Historical values with ready-made statistics (min, max, average, time-weighted average, delta, meter increase) and optional values per interval. Times as text (`-24h`, `yesterday`, `2026-10-01 08:00`); the history adapter (history, sql, influxdb) is detected from the state.
+- **listHistoryStates** (`listHistoryStates.mjs`) – List states that have history enabled, with name, unit and history instance.
 - **getAdapters** (`getAdapters.mjs`) – List all installed adapters in the system.
 - **getRunningInstances** (`getInstances.mjs`) – List adapter instance objects (all instances, not only running ones).
 
@@ -192,6 +193,8 @@ console.log(Buffer.from("username:password").toString("base64"))
 ### **WORK IN PROGRESS**
 
 - (michiproep) removed the non-functional Webhook URL setting
+- (michiproep) **getHistory reworked:** detects the history adapter of the state, times as text (`-24h`, `yesterday`, dates), statistics computed by the adapter (incl. meter consumption), values per interval, clear error messages and timeouts instead of empty results
+- (michiproep) new tool **listHistoryStates**: find states that have history
 
 ### 0.6.0 (2026-10-06)
 
