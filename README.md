@@ -189,12 +189,12 @@ console.log(Buffer.from("username:password").toString("base64"))
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 0.6.1 (2026-10-06)
 
 - (michiproep) removed the non-functional Webhook URL setting
 - (michiproep) **getHistory reworked:** detects the history adapter of the state, times as text (`-24h`, `yesterday`, dates), statistics computed by the adapter (incl. meter consumption), values per interval, clear error messages and timeouts instead of empty results
 - (michiproep) new tool **listHistoryStates**: find states that have history
+- (michiproep) getHistory follows aliases (`alias.0.*`) to the logged target state and loads long ranges (e.g. a whole year) completely
 
 ### 0.6.0 (2026-10-06)
 
