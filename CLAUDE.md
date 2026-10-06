@@ -74,6 +74,10 @@ npm run release -- patch|minor|major   # see CONTRIBUTING.md; only on an up-to-d
 
 - `main` is always releasable. Never commit directly to `main`.
 - Branch per change: `feat/…`, `fix/…`, `chore/…` (deps, tooling, CI), `docs/…`. Open a PR to `main`; CI must be green.
+- `main` has a ruleset (PR required, `check-and-lint` + all `adapter-tests` required). Auto-merge is enabled for the
+  repository; merging stays the user's decision (enable it per PR only when asked).
+- Always open PRs against `main`, not stacked on another PR branch: merging a stacked PR lands it in the base branch,
+  not in `main`.
 - Small, focused commits with imperative messages (`fix: await getHistory call`).
 - Releases are tags `vX.Y.Z` created by the release script on `main` — never hand-made tags.
 - Tags `v0.5.0` and `v0.5.1` are manual snapshots of the upstream state (commit 16a0819). The version in

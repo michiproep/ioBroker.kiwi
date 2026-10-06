@@ -20,7 +20,11 @@ We use a simple trunk-based flow (GitHub flow):
 - Open a pull request to `main`. CI (`Test and Release`) must be green before merging.
   PRs and pushes test on Linux and macOS; Windows is only tested for release tags, because its runners are slow.
 - Prefer **squash merge** so `main` gets one clean commit per change.
-- Delete the branch after merging.
+- `main` is protected by the ruleset _"main: PR + green CI"_: changes only via pull request, `check-and-lint` and all
+  `adapter-tests` jobs must pass, no force-push or deletion. Repository admins can bypass it (needed for the release
+  script, which pushes the version commit and tag directly).
+- **Auto-merge:** enable it on a PR (button _"Enable auto-merge"_ → squash, or `gh pr merge <nr> --auto --squash`)
+  and GitHub merges it as soon as all required checks are green. Merged branches are deleted automatically.
 - Experiments (for example trying a new vector store) live on `feat/…` branches. They are merged only when they are
   usable and documented in the README's
   [AI and vector store integration status](README.md#ai-and-vector-store-integration-status).
