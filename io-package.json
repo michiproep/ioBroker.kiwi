@@ -137,8 +137,8 @@
     ],
     "native": {
         "webInstance": "*",
-        "models": "gemini-2.5-flash-preview-05-20",
-        "embeddingModel": "gemini-embedding-exp-03-07",
+        "aiProvider": "openai",
+        "models": "",
         "apiKey": "",
         "temperature": 0.2,
         "namespace": "kiwi.0",

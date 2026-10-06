@@ -1,6 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
 import { Chatbot } from "./lib/chatbot.mjs";
-import { OpenAiVectorDB } from "./lib/openai-sqlite-vectorize.mjs";
+import { PROVIDERS, createVectorDB, listChatModels, normalizeProvider, resolveModel } from "./lib/ai-provider.mjs";
 // eslint-disable-next-line
 import * as utils from "@iobroker/adapter-core";
 
@@ -70,25 +69,21 @@ class McpServer extends utils.Adapter {
 				this.log.error(`Error updating configuration: ${e.message}`);
 			} */
 		}
-		// this.vectorDB = new VectorDB({
-		// 	apiKey: this.config.apiKey,
-		// 	webhookUrl: this.config.webhookUrl,
-		// 	embeddingModel: this.config.embeddingModel || "gemini-embedding-exp-03-07",
-		// 	dimensionality: 768,
-		// 	namespace: this.namespace,
-		// 	dbPath: this.config.dataDir,
-		// });
+		const provider = normalizeProvider(this.config.aiProvider);
 		if (!this.config.apiKey) {
 			this.log.warn(
-				"[Kiwi Adapter] No API key configured: semantic search indexing and the chat bot are disabled. The MCP server still works.",
+				`[Kiwi Adapter] No ${PROVIDERS[provider].label} API key configured: semantic search indexing and the chat bot are disabled. The MCP server still works.`,
 			);
 			this.setState("info.connection", { val: false, ack: true });
 			return;
 		}
-		this.vectorDB = new OpenAiVectorDB({
+		this.log.info(`[Kiwi Adapter] AI provider: ${PROVIDERS[provider].label}`);
+		this.vectorDB = createVectorDB({
+			provider,
 			apiKey: this.config.apiKey,
 			namespace: this.namespace,
 			dbPath: this.config.dataDir,
+			logger: this.log,
 		});
 		await this.vectorDB.init();
 		//this.subscribeObjects("*");
@@ -96,11 +91,16 @@ class McpServer extends utils.Adapter {
 		this.subscribeForeignObjects("*");
 		this.log.info(`[Kiwi Adapter] register Object Change Listener`);
 		this.setState("info.connection", { val: true, ack: true });
+		// e.g. after switching the provider, the new store is empty: index what is missing in the background
+		this.indexMissingDescriptions().catch((e) =>
+			this.log.error(`[Kiwi Adapter] Re-indexing descriptions failed: ${e.message}`),
+		);
 		this.chatbot = new Chatbot({
+			provider,
 			apiKey: this.config.apiKey,
-			modelName: this.config.models,
+			modelName: resolveModel(provider, this.config.models),
 			systemPrompt: this.config.systemPrompt,
-			temperature: this.config.temperature || 0.7,
+			temperature: this.config.temperature ?? 0.7,
 			adapter: this,
 			logger: this.log,
 			dbPath: this.config.dataDir,
@@ -139,21 +139,27 @@ class McpServer extends utils.Adapter {
 		}
 	}
 	/**
-	 * Helper function to fetch and process models (avoids code duplication)
-	 * @param {string} apiKey The API key to use
-	 * @returns {Promise<Array<{value: string, label: string}>>}
+	 * Adds all described states that are not yet in the vector store of the active provider.
 	 */
-	async fetchAndFilterGeminiModels(apiKey, modelType) {
-		const models = [{ label: "Enter API Key & click Refresh", value: "" }];
-		this.genAI = new GoogleGenAI({ apiKey: apiKey });
-		const modelsPager = await this.genAI.models.list();
-
-		for await (const m of modelsPager) {
-			if (m.supportedActions && m.supportedActions.includes(modelType)) {
-				models.push({ value: m.name || "", label: m.displayName || m.name || "none" });
+	async indexMissingDescriptions() {
+		let indexed = 0;
+		for (const [id, entry] of this._indexedObjects) {
+			if (!entry.enabled || !entry.description || entry.type !== "state" || this.vectorDB.has(id)) {
+				continue;
+			}
+			try {
+				const obj = await this.getForeignObjectAsync(id);
+				if (obj) {
+					await this.vectorDB.write(id, entry.description, obj);
+					indexed++;
+				}
+			} catch (e) {
+				this.log.warn(`[Kiwi Adapter] Could not index ${id}: ${e.message}`);
 			}
 		}
-		return models;
+		if (indexed) {
+			this.log.info(`[Kiwi Adapter] Indexed ${indexed} described state(s) missing in the vector store.`);
+		}
 	}
 
 	async onObjectChange(id, obj) {
@@ -188,7 +194,7 @@ class McpServer extends utils.Adapter {
 				} else {
 					this.log.warn(`[Kiwi Adapter] vectorDB not initialized; cannot write index for ${id}.`);
 				}
-				this._indexedObjects.set(id, { enabled, description });
+				this._indexedObjects.set(id, { enabled, description, type: obj.type });
 				return;
 			}
 
@@ -197,7 +203,7 @@ class McpServer extends utils.Adapter {
 				await this.vectorDB.deleteItem(id);
 				this.log.info(`[Kiwi Adapter] Removed from index: ${id}`);
 			}
-			this._indexedObjects.set(id, { enabled, description });
+			this._indexedObjects.set(id, { enabled, description, type: obj.type });
 		} catch (e) {
 			this.log.error(`[Kiwi Adapter] Error handling object change for ${id}: ${e.message}`);
 		}
@@ -210,14 +216,19 @@ class McpServer extends utils.Adapter {
 	 */
 
 	async onMessage(obj) {
-		this.log.info(`[Kiwi Adapter onMessage] Received command: ${JSON.stringify(obj)} `);
+		this.log.debug(`[Kiwi Adapter onMessage] Received command: ${obj.command}`);
 		try {
-			const apiKey = this.config.apiKey;
-			let models = [{ label: "Enter API Key & Save", value: "" }];
+			// the settings page sends the current (possibly unsaved) provider and key
+			const message = obj.message && typeof obj.message === "object" ? obj.message : {};
+			const provider = normalizeProvider(message.provider || this.config.aiProvider);
+			const apiKey = message.apiKey || this.config.apiKey;
+			let models = [{ label: "Enter API Key", value: "" }];
 			switch (obj.command) {
+				case "getModels":
 				case "getGeminiModels": {
-					if (!apiKey) return;
-					models = await this.fetchAndFilterGeminiModels(apiKey, "generateContent");
+					if (apiKey) {
+						models = await listChatModels(provider, apiKey);
+					}
 					break;
 				}
 				default:
