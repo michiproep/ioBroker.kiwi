@@ -11,8 +11,6 @@
 	"the system prompt for the integrated chat client.": "the system prompt for the integrated chat client.",
 	"Temperature": "Temperature",
 	"the 'randomness' or 'creativeness' of the response": "the 'randomness' or 'creativeness' of the response",
-	"Webhook URL": "Webhook URL",
-	"Enter the webhook URL to send data to": "Enter the webhook URL to send data to",
 	"AI provider": "AI provider",
 	"Used for the chat bot and for the semantic search embeddings. The API key must belong to this provider.": "Used for the chat bot and for the semantic search embeddings. The API key must belong to this provider.",
 	"API Key": "API Key",

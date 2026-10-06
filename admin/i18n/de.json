@@ -6,7 +6,6 @@
 	"Describe this devicestate, its purpose, and location. This description will be used for the semantic search feature. It is language-agnostic: you can describe it in any language, and search in any other language.": "Beschreiben Sie diesen Devicestate, seinen Zweck und den Ort. Diese Beschreibung wird für die semantische Suchfunktion verwendet. Es ist Sprach-Agnostiker: Sie können es in jeder Sprache beschreiben und in jeder anderen Sprache suchen.",
 	"Description": "Beschreibung",
 	"Empty: default model of the provider": "Leer: Standardmodell des Anbieters",
-	"Enter the webhook URL to send data to": "Geben Sie die Webhook-URL ein, an die Daten gesendet werden",
 	"Enter your API key here": "Geben Sie hier Ihren API -Schlüssel ein",
 	"Instance of Web Adapter": "Instanz des Webadapters",
 	"Select Language Model": "Wählen Sie Sprachmodell",
@@ -15,7 +14,6 @@
 	"System Prompt": "Systemaufforderung",
 	"Temperature": "Temperatur",
 	"Used for the chat bot and for the semantic search embeddings. The API key must belong to this provider.": "Wird für den Chatbot und für die Einbettungen der semantischen Suche verwendet. Der API-Schlüssel muss zu diesem Anbieter gehören.",
-	"Webhook URL": "Webhook-URL",
 	"the 'randomness' or 'creativeness' of the response": "die \"Zufälligkeit\" oder \"Kreativität\" der Antwort",
 	"the system prompt for the integrated chat client.": "Die Systemaufforderung für den integrierten Chat -Client."
 }
