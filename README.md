@@ -17,7 +17,7 @@ and semantic search over your states.
 
 - Node.js >= 22, js-controller >= 6.0.11, admin >= 7.6.20 and a web adapter instance (serves the MCP endpoint)
 - 64-bit system (x64 or arm64; Linux, Windows or macOS). 32-bit ARM (for example Raspberry Pi OS 32-bit) is not
-  supported, because the native modules `better-sqlite3` and `sqlite-vec` have no builds for it.
+  supported, because the native module `sqlite-vec` has no build for it.
 - An API key, see [AI and vector store integration status](#ai-and-vector-store-integration-status). Without a key the
   adapter starts, but semantic search and the chat bot are disabled.
 
@@ -193,7 +193,7 @@ console.log(Buffer.from("username:password").toString("base64"))
 
 - (michiproep) documented the AI and vector store integration status, branching and release process
 - (michiproep) **Breaking:** Node.js >= 22 and admin >= 7.6.20 required
-- (michiproep) dependencies updated (Gemini SDK 2, OpenAI SDK 7, better-sqlite3 13, MCP SDK 1.32, zod 4, mingo 7)
+- (michiproep) dependencies updated (Gemini SDK 2, OpenAI SDK 7, better-sqlite3 12.11, MCP SDK 1.32, zod 4, mingo 7)
 - (michiproep) fix: adapter no longer crashes in a loop when no API key is configured
 - (michiproep) CI: tests on Node.js 22/24/26, GitHub release on tag, new Dependabot auto-merge workflow
 
