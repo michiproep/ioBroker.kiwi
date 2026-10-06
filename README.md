@@ -115,7 +115,6 @@ Overview of what is active and what is only prepared:
 | Semantic state search                                 | OpenAI or Gemini embeddings + SQLite with `sqlite-vec` (`lib/openai-sqlite-vectorize.mjs`, `lib/sqlite-vectorize.mjs`, selected in `lib/ai-provider.mjs`) | **active**                                                                                                                                                                                                                                          |
 | Object search                                         | MongoDB-style queries over all ioBroker objects with `mingo` (`mingoSearch` tool, also used as filter for semantic search results)                        | **active**                                                                                                                                                                                                                                          |
 | OpenAI embeddings + Postgres                          | `pgvector` table `iobroker_vector_store` (`lib/openai-postgres-vectorize.mjs`)                                                                            | prepared, not used: never instantiated, no admin settings, connection string only via constructor option (hard-coded default `postgres://homeserver1:5432/postgres`). The ivfflat index cannot be created for 3072 dimensions (pgvector limit 2000) |
-| Webhook on index write                                | `Webhook URL` field in the instance settings, code in `lib/sqlite-vectorize.mjs`                                                                          | prepared, not functional: the field is saved but the code is commented out                                                                                                                                                                          |
 | Web chat UI                                           | `lib/public/` (`/kiwi/<instance>/index.html`)                                                                                                             | prepared, not functional: the page sends messages over socket.io but nothing in the adapter answers them                                                                                                                                            |
 
 Using an external MCP client (Claude Desktop, VS Code, …) works with either provider; the provider is then only used
@@ -189,6 +188,11 @@ console.log(Buffer.from("username:password").toString("base64"))
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+- (michiproep) removed the non-functional Webhook URL setting
+
 ### 0.6.0 (2026-10-06)
 
 - (michiproep) documented the AI and vector store integration status, branching and release process

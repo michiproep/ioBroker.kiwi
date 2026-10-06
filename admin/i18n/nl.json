@@ -6,7 +6,6 @@
 	"Describe this devicestate, its purpose, and location. This description will be used for the semantic search feature. It is language-agnostic: you can describe it in any language, and search in any other language.": "Beschrijf dit devicestate, het doel en de locatie. Deze beschrijving wordt gebruikt voor de semantische zoekfunctie. Het is taal-agnostisch: u kunt het in elke taal beschrijven en in elke andere taal zoeken.",
 	"Description": "Beschrijving",
 	"Empty: default model of the provider": "Leeg: standaardmodel van de provider",
-	"Enter the webhook URL to send data to": "Voer de webhook-URL in waarnaar gegevens moeten worden verzonden",
 	"Enter your API key here": "Voer hier uw API -sleutel in",
 	"Instance of Web Adapter": "Exemplaar van webadapter",
 	"Select Language Model": "Selecteer taalmodel",
@@ -15,7 +14,6 @@
 	"System Prompt": "Systeemprompt",
 	"Temperature": "Temperatuur",
 	"Used for the chat bot and for the semantic search embeddings. The API key must belong to this provider.": "Gebruikt voor de chatbot en voor de semantische zoekinsluitingen. De API-sleutel moet bij deze provider horen.",
-	"Webhook URL": "Webhook-URL",
 	"the 'randomness' or 'creativeness' of the response": "de 'willekeur' of 'creativiteit' van de reactie",
 	"the system prompt for the integrated chat client.": "De systeemprompt voor de geïntegreerde chat -client."
 }
