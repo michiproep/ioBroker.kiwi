@@ -78,6 +78,13 @@ class McpServer extends utils.Adapter {
 		// 	namespace: this.namespace,
 		// 	dbPath: this.config.dataDir,
 		// });
+		if (!this.config.apiKey) {
+			this.log.warn(
+				"[Kiwi Adapter] No API key configured: semantic search indexing and the chat bot are disabled. The MCP server still works.",
+			);
+			this.setState("info.connection", { val: false, ack: true });
+			return;
+		}
 		this.vectorDB = new OpenAiVectorDB({
 			apiKey: this.config.apiKey,
 			namespace: this.namespace,
