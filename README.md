@@ -185,6 +185,9 @@ console.log(Buffer.from("username:password").toString("base64"))
 ### **WORK IN PROGRESS**
 
 - (michiproep) documented the AI and vector store integration status, branching and release process
+- (michiproep) **Breaking:** Node.js >= 22 and admin >= 7.6.17 required
+- (michiproep) dependencies updated (Gemini SDK 2, OpenAI SDK 7, better-sqlite3 13, MCP SDK 1.32, zod 4, mingo 7)
+- (michiproep) fix: adapter no longer crashes in a loop when no API key is configured
 
 ### 0.4.2
 
