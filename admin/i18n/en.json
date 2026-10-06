@@ -11,5 +11,7 @@
 	"System Prompt": "System Prompt",
 	"the system prompt for the integrated chat client.": "the system prompt for the integrated chat client.",
 	"Temperature": "Temperature",
-	"the 'randomness' or 'creativeness' of the response": "the 'randomness' or 'creativeness' of the response"
+	"the 'randomness' or 'creativeness' of the response": "the 'randomness' or 'creativeness' of the response",
+	"Webhook URL": "Webhook URL",
+	"Enter the webhook URL to send data to": "Enter the webhook URL to send data to"
 }

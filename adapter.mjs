@@ -5,7 +5,7 @@ import { OpenAiVectorDB } from "./lib/openai-sqlite-vectorize.mjs";
 import * as utils from "@iobroker/adapter-core";
 
 // Load your modules here, e.g.:
-// import fs from "fs";
+// import fs from "node:fs";
 class McpServer extends utils.Adapter {
 	/**
 	 * @param {Partial<utils.AdapterOptions>} [options={}]
@@ -44,7 +44,7 @@ class McpServer extends utils.Adapter {
 		}
 
 		try {
-			await import("fs/promises").then((fs) => fs.mkdir(newPath, { recursive: true }));
+			await import("node:fs/promises").then((fs) => fs.mkdir(newPath, { recursive: true }));
 			this.log.info(`[Kiwi Adapter] Ensured data directory exists: ${newPath}`);
 		} catch (e) {
 			this.log.error(`[Kiwi Adapter] Failed to create data directory: ${e.message}`);

@@ -72,3 +72,5 @@ npm run release -- patch|minor|major   # see CONTRIBUTING.md; only on an up-to-d
 - Branch per change: `feat/…`, `fix/…`, `chore/…` (deps, tooling, CI), `docs/…`. Open a PR to `main`; CI must be green.
 - Small, focused commits with imperative messages (`fix: await getHistory call`).
 - Releases are tags `vX.Y.Z` created by the release script on `main` — never hand-made tags.
+- Tags `v0.5.0` and `v0.5.1` are manual snapshots of upstream state (commit 16a0819) while package.json was still
+  0.4.3. The first release-script release must therefore be explicit and higher: `npm run release -- 0.6.0`.
