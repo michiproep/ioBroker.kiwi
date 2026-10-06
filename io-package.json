@@ -2,7 +2,7 @@
     "common": {
         "messagebox": true,
         "name": "kiwi",
-        "version": "0.4.3",
+        "version": "0.5.1",
         "news": {
             "0.4.2": {
                 "en": "bugfix: await getHistory call",
@@ -137,8 +137,8 @@
     ],
     "native": {
         "webInstance": "*",
-        "models": "gemini-2.5-flash-preview-05-20",
-        "embeddingModel": "gemini-embedding-exp-03-07",
+        "aiProvider": "openai",
+        "models": "",
         "apiKey": "",
         "temperature": 0.2,
         "namespace": "kiwi.0",
