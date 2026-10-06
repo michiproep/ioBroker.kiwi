@@ -1,8 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { Chatbot } from "./lib/chatbot.mjs";
-import { VectorDB } from "./lib/sqlite-vectorize.mjs";
 import { OpenAiVectorDB } from "./lib/openai-sqlite-vectorize.mjs";
-import { PGOpenAiVectorDB } from "./lib/openai-postgres-vectorize.mjs";
 // eslint-disable-next-line
 import * as utils from "@iobroker/adapter-core";
 
