@@ -121,7 +121,7 @@ Tool names as the MCP client sees them (source file in brackets).
 - **describe** (`describe.mjs`) – Set a description for a single object (enables semantic search).
 - **describeBulk** (`describeBulk.mjs`) – Set descriptions for multiple objects at once.
 - **deleteItemFromIndex** (`deleteItemFromIndex.mjs`) – Remove an item from the semantic search index.
-- **mingoSearch** (`mingo.js`) – Search the object database with MongoDB-style queries.
+- **mingoSearch** (`mingo.mjs`) – Search the object database with MongoDB-style queries.
 
 ### low level functions
 
