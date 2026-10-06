@@ -196,7 +196,7 @@ console.log(Buffer.from("username:password").toString("base64"))
 - (michiproep) **Breaking:** Node.js >= 22 and admin >= 7.6.20 required
 - (michiproep) dependencies updated (Gemini SDK 2, OpenAI SDK 7, better-sqlite3 12.11, MCP SDK 1.32, zod 4, mingo 7)
 - (michiproep) fix: adapter no longer crashes in a loop when no API key is configured
-- (michiproep) CI: tests on Node.js 22/24/26, GitHub release on tag, new Dependabot auto-merge workflow
+- (michiproep) CI: tests on Node.js 22/24/26 (Windows only for releases), GitHub release on tag, new Dependabot auto-merge workflow
 - (michiproep) new setting **AI provider** (OpenAI default, Google Gemini): the API key is used for chat and embeddings of the selected provider; model list per provider; OpenAI chat with tool calling
 - (michiproep) fix: the MCP endpoint (web extension) now decrypts the stored API key
 
