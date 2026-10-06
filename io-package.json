@@ -84,7 +84,8 @@
             "zh-cn": "来自任何MCP客户端的AI控制IO-broker的MCP服务器"
         },
         "authors": [
-            "Holger Will <h.will@klimapartner.de>"
+            "Holger Will <h.will@klimapartner.de>",
+            "Michael Pröpster <imp@outlook.de>"
         ],
         "keywords": [
             "LLM",
@@ -99,8 +100,8 @@
         "platform": "Javascript/Node.js",
         "icon": "kiwi-logo.png",
         "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/Holger-Will/ioBroker.kiwi/main/admin/kiwi-logo.png",
-        "readme": "https://github.com/Holger-Will/ioBroker.kiwi/blob/main/README.md",
+        "extIcon": "https://raw.githubusercontent.com/michiproep/ioBroker.kiwi/main/admin/kiwi-logo.png",
+        "readme": "https://github.com/michiproep/ioBroker.kiwi/blob/main/README.md",
         "loglevel": "info",
         "tier": 3,
         "mode": "daemon",
@@ -124,7 +125,7 @@
         ],
         "globalDependencies": [
             {
-                "admin": ">=7.4.10"
+                "admin": ">=7.6.20"
             }
         ]
     },

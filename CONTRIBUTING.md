@@ -67,13 +67,17 @@ Releases use [`@alcalzone/release-script`](https://github.com/AlCalzone/release-
    The script bumps the version in package.json and io-package.json, turns the changelog placeholder into the version
    entry, writes translated `common.news`, commits, creates the tag `vX.Y.Z` and pushes.
 4. The tag push runs the `deploy` job in `.github/workflows/test-and-release.yml` after all tests pass:
-    - **Default (fork):** a GitHub release is created. Install it in ioBroker via
-      _Adapters → Install from custom URL_ with `https://github.com/michiproep/ioBroker.kiwi/tarball/vX.Y.Z`
-      (or the plain GitHub URL for the latest `main`).
+    - **Default (fork):** a GitHub release is created, see [Installing a fork release](#installing-a-fork-release).
     - **npm publishing** is only possible once this fork has publish rights for the `iobroker.kiwi` npm package
       (currently owned by the upstream author; for abandoned adapters, ask the ioBroker core team about taking over
       maintenance). Then set the repository variable `NPM_PUBLISH=true` and configure npm
-      [trusted publishing](https://docs.npmjs.com/trusted-publishers) for this repository (or add an `NPM_TOKEN` secret).
+      [trusted publishing](https://docs.npmjs.com/trusted-publishers) for this repository and the workflow
+      `test-and-release.yml`.
+
+### Installing a fork release
+
+Until the fork can publish to npm, install a GitHub release in ioBroker via _Adapters → Install from custom URL_
+(expert mode) with `https://github.com/michiproep/ioBroker.kiwi/tarball/vX.Y.Z`.
 
 Never create release tags by hand. If a tag was created by mistake, delete it locally and on GitHub before the next
 release, or release a higher version.
