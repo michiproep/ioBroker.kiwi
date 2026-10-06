@@ -45,7 +45,10 @@ jobs:
                 os: [ubuntu-latest, windows-latest, macos-latest]
 
         steps:
-            - uses: ioBroker/testing-action-adapter@v1
+            # Windows runners are slow: only test on Windows for release tags (vX.Y.Z), not for PRs and pushes.
+            # (The job stays in the matrix so the ioBroker repository checker sees all OSes.)
+            - if: matrix.os != 'windows-latest' || startsWith(github.ref, 'refs/tags/v')
+              uses: ioBroker/testing-action-adapter@v1
               with:
                   node-version: ${{ matrix.node-version }}
                   os: ${{ matrix.os }}

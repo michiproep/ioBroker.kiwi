@@ -18,6 +18,7 @@ We use a simple trunk-based flow (GitHub flow):
     | `docs/`  | documentation only                     | `docs/vector-store-status`          |
 
 - Open a pull request to `main`. CI (`Test and Release`) must be green before merging.
+  PRs and pushes test on Linux and macOS; Windows is only tested for release tags, because its runners are slow.
 - Prefer **squash merge** so `main` gets one clean commit per change.
 - Delete the branch after merging.
 - Experiments (for example trying a new vector store) live on `feat/…` branches. They are merged only when they are
