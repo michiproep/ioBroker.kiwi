@@ -189,8 +189,7 @@ console.log(Buffer.from("username:password").toString("base64"))
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 0.6.0 (2026-10-06)
 
 - (michiproep) documented the AI and vector store integration status, branching and release process
 - (michiproep) **Breaking:** Node.js >= 22 and admin >= 7.6.20 required
