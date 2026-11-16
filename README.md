@@ -189,6 +189,10 @@ console.log(Buffer.from("username:password").toString("base64"))
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+- (michiproep) MCP endpoint: parallel tool calls no longer fail with "500 Internal server error" and no longer cancel each other
+
 ### 0.6.1 (2026-10-06)
 
 - (michiproep) removed the non-functional Webhook URL setting
