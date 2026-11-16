@@ -70,31 +70,39 @@ class McpServer extends utils.Adapter {
 			} */
 		}
 		const provider = normalizeProvider(this.config.aiProvider);
-		if (!this.config.apiKey) {
+		const hasKey = !!this.config.apiKey;
+		if (hasKey) {
+			this.log.info(`[Kiwi Adapter] AI provider: ${PROVIDERS[provider].label}`);
+		} else {
 			this.log.warn(
-				`[Kiwi Adapter] No ${PROVIDERS[provider].label} API key configured: semantic search indexing and the chat bot are disabled. The MCP server still works.`,
+				`[Kiwi Adapter] No ${PROVIDERS[provider].label} API key configured: the chat bot is disabled and the state search uses full-text search instead of embeddings. The MCP server still works.`,
 			);
-			this.setState("info.connection", { val: false, ack: true });
-			return;
 		}
-		this.log.info(`[Kiwi Adapter] AI provider: ${PROVIDERS[provider].label}`);
+		// without an API key this is the full-text store (see createVectorDB)
 		this.vectorDB = createVectorDB({
 			provider,
 			apiKey: this.config.apiKey,
 			namespace: this.namespace,
-			dbPath: this.config.dataDir,
+			// the instance data dir itself: on the first start config.dataDir still holds the io-package default
+			dbPath: newPath,
 			logger: this.log,
 		});
 		await this.vectorDB.init();
-		//this.subscribeObjects("*");
-		this.subscribeStates("chat.prompt");
 		this.subscribeForeignObjects("*");
 		this.log.info(`[Kiwi Adapter] register Object Change Listener`);
-		this.setState("info.connection", { val: true, ack: true });
+		this.setState("info.connection", { val: hasKey, ack: true });
+		// the full-text store is cheap to build: rebuild it, so changes made while a key was set are not missed
+		if (typeof this.vectorDB.clear === "function") {
+			this.vectorDB.clear();
+		}
 		// e.g. after switching the provider, the new store is empty: index what is missing in the background
 		this.indexMissingDescriptions().catch((e) =>
 			this.log.error(`[Kiwi Adapter] Re-indexing descriptions failed: ${e.message}`),
 		);
+		if (!hasKey) {
+			return;
+		}
+		this.subscribeStates("chat.prompt");
 		this.chatbot = new Chatbot({
 			provider,
 			apiKey: this.config.apiKey,
@@ -103,7 +111,8 @@ class McpServer extends utils.Adapter {
 			temperature: this.config.temperature ?? 0.7,
 			adapter: this,
 			logger: this.log,
-			dbPath: this.config.dataDir,
+			// the instance data dir itself: on the first start config.dataDir still holds the io-package default
+			dbPath: newPath,
 		});
 		// Initialize
 		await this.chatbot.init();

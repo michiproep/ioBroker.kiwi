@@ -29,5 +29,57 @@ tests.integration(path.join(__dirname, ".."), {
 				expect(state && state.val).to.equal(false);
 			});
 		});
+
+		suite("Full-text search without API key", (getHarness) => {
+			let harness;
+			before(() => {
+				harness = getHarness();
+			});
+
+			function describedState(name, description) {
+				return {
+					type: "state",
+					common: {
+						name,
+						type: "boolean",
+						role: "switch",
+						read: true,
+						write: true,
+						custom: { "kiwi.0": { enabled: true, description } },
+					},
+					native: {},
+				};
+			}
+
+			it("indexes described states at startup and on change", async function () {
+				this.timeout(90000);
+				// described before the start: indexed by the rebuild at startup
+				await harness.objects.setObjectAsync(
+					"javascript.0.test.lamp",
+					describedState("Wohnzimmerlampe", "Deckenlampe im Wohnzimmer"),
+				);
+				await harness.startAdapterAndWait();
+				await new Promise((resolve) => setTimeout(resolve, 5000));
+				// described while running: indexed by onObjectChange
+				await harness.objects.setObjectAsync(
+					"javascript.0.test.door",
+					describedState("Garage", "Garagentor offen oder geschlossen"),
+				);
+				await new Promise((resolve) => setTimeout(resolve, 3000));
+
+				const { FulltextSearchDB } = await import("../lib/sqlite-fulltext.mjs");
+				const store = new FulltextSearchDB({
+					dbPath: path.join(harness.testDir, "iobroker-data", "kiwi.0"),
+					logger: { info: () => {}, error: () => {} },
+				});
+				await store.init();
+				try {
+					expect((await store.find("lampe")).map((r) => r.id)).to.deep.equal(["javascript.0.test.lamp"]);
+					expect((await store.find("garagentor")).map((r) => r.id)).to.deep.equal(["javascript.0.test.door"]);
+				} finally {
+					store.close();
+				}
+			});
+		});
 	},
 });
