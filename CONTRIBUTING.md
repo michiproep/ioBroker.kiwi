@@ -18,9 +18,10 @@ We use a simple trunk-based flow (GitHub flow):
     | `docs/`  | documentation only                     | `docs/vector-store-status`          |
 
 - Open a pull request to `main`. CI (`Test and Release`) must be green before merging.
-  PRs and pushes test on Linux and macOS; Windows is only tested for release tags, because its runners are slow.
+  PRs and pushes test on Linux only; Windows and macOS are only tested for release tags, because their runners are slow
+  or often not available.
 - Prefer **squash merge** so `main` gets one clean commit per change.
-- `main` is protected by the ruleset _"main: PR + green CI"_: changes only via pull request, `check-and-lint` and all
+- `main` is protected by the ruleset _"main: PR + green CI"_: changes only via pull request, `check-and-lint` and the Linux
   `adapter-tests` jobs must pass, no force-push or deletion. Repository admins can bypass it (needed for the release
   script, which pushes the version commit and tag directly).
 - **Auto-merge:** enable it on a PR (button _"Enable auto-merge"_ → squash, or `gh pr merge <nr> --auto --squash`)
