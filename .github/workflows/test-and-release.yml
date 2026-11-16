@@ -33,18 +33,22 @@ jobs:
                   type-checking: true
 
     # Runs adapter tests on all supported node versions.
-    # PRs and pushes test on Linux only; Windows and macOS runners are slow or often not available
-    # (macOS jobs regularly wait in the queue until they time out). Release tags (vX.Y.Z) test on all OSes.
+    # PRs and pushes test on Linux only; Windows and macOS runners are slow or often not available.
+    # Release tags (vX.Y.Z) test on all OSes. macOS hosted runners are regularly not acquired at all,
+    # so a failed macOS job does not block the release (continue-on-error).
     adapter-tests:
         needs: [check-and-lint]
 
         if: contains(github.event.head_commit.message, '[skip ci]') == false
 
         runs-on: ${{ matrix.os }}
+        continue-on-error: ${{ matrix.os == 'macos-latest' }}
         strategy:
             matrix:
                 node-version: [22.x, 24.x, 26.x]
-                os: ${{ fromJSON(startsWith(github.ref, 'refs/tags/v') && '["ubuntu-latest", "windows-latest", "macos-latest"]' || '["ubuntu-latest"]') }}
+                os: [ubuntu-latest, windows-latest, macos-latest]
+                # Windows and macOS only for release tags
+                exclude: ${{ fromJSON(startsWith(github.ref, 'refs/tags/v') && '[]' || '[{"os":"windows-latest"},{"os":"macos-latest"}]') }}
 
         steps:
             - uses: ioBroker/testing-action-adapter@v1

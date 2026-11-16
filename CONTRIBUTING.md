@@ -19,7 +19,8 @@ We use a simple trunk-based flow (GitHub flow):
 
 - Open a pull request to `main`. CI (`Test and Release`) must be green before merging.
   PRs and pushes test on Linux only; Windows and macOS are only tested for release tags, because their runners are slow
-  or often not available.
+  or often not available. A failed macOS job does not block the release, because its hosted runners are regularly not
+  acquired at all.
 - Prefer **squash merge** so `main` gets one clean commit per change.
 - `main` is protected by the ruleset _"main: PR + green CI"_: changes only via pull request, `check-and-lint` and the Linux
   `adapter-tests` jobs must pass, no force-push or deletion. Repository admins can bypass it (needed for the release
