@@ -24,6 +24,8 @@ jobs:
         if: contains(github.event.head_commit.message, '[skip ci]') == false
 
         runs-on: ubuntu-latest
+        # a normal run takes under a minute; do not wait the default 6 hours for a hanging runner
+        timeout-minutes: 10
 
         steps:
             - uses: ioBroker/testing-action-check@v2
@@ -43,6 +45,8 @@ jobs:
 
         runs-on: ${{ matrix.os }}
         continue-on-error: ${{ matrix.os == 'macos-latest' }}
+        # a normal run takes 1-2 minutes (Windows longer); do not wait the default 6 hours for a hanging test
+        timeout-minutes: 20
         strategy:
             matrix:
                 node-version: [22.x, 24.x, 26.x]
