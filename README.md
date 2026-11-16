@@ -189,7 +189,7 @@ console.log(Buffer.from("username:password").toString("base64"))
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.6.2 (2026-11-16)
 
 - (michiproep) MCP endpoint: parallel tool calls no longer fail with "500 Internal server error" and no longer cancel each other
 

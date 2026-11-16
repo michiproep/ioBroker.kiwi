@@ -2,7 +2,7 @@
   "common": {
     "messagebox": true,
     "name": "kiwi",
-    "version": "0.6.1",
+    "version": "0.6.2",
     "news": {
       "0.6.2": {
         "en": "MCP endpoint: parallel tool calls no longer fail with \"500 Internal server error\" and no longer cancel each other",
