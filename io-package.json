@@ -4,7 +4,7 @@
     "name": "kiwi",
     "version": "0.6.1",
     "news": {
-      "NEXT": {
+      "0.6.2": {
         "en": "MCP endpoint: parallel tool calls no longer fail with \"500 Internal server error\" and no longer cancel each other",
         "de": "MCP-Endpunkt: Parallele Tool-Aufrufe schlagen nicht mehr mit „500 Internal server error“ fehl und brechen sich nicht mehr gegenseitig ab",
         "ru": "Конечная точка MCP: параллельные вызовы инструментов больше не завершаются ошибкой «500 Internal server error» и больше не отменяют друг друга",
