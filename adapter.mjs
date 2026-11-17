@@ -1,4 +1,5 @@
 import { Chatbot } from "./lib/chatbot.mjs";
+import { syncSearchIndex } from "./lib/search-index.mjs";
 import { PROVIDERS, createVectorDB, listChatModels, normalizeProvider, resolveModel } from "./lib/ai-provider.mjs";
 // eslint-disable-next-line
 import * as utils from "@iobroker/adapter-core";
@@ -70,31 +71,38 @@ class McpServer extends utils.Adapter {
 			} */
 		}
 		const provider = normalizeProvider(this.config.aiProvider);
-		if (!this.config.apiKey) {
+		const hasKey = !!this.config.apiKey;
+		if (hasKey) {
+			this.log.info(`[Kiwi Adapter] AI provider: ${PROVIDERS[provider].label}`);
+		} else {
 			this.log.warn(
-				`[Kiwi Adapter] No ${PROVIDERS[provider].label} API key configured: semantic search indexing and the chat bot are disabled. The MCP server still works.`,
+				`[Kiwi Adapter] No ${PROVIDERS[provider].label} API key configured: the chat bot is disabled and the state search uses full-text search instead of embeddings. The MCP server still works.`,
 			);
-			this.setState("info.connection", { val: false, ack: true });
-			return;
 		}
-		this.log.info(`[Kiwi Adapter] AI provider: ${PROVIDERS[provider].label}`);
+		// without an API key this is the full-text store (see createVectorDB)
 		this.vectorDB = createVectorDB({
 			provider,
 			apiKey: this.config.apiKey,
 			namespace: this.namespace,
-			dbPath: this.config.dataDir,
+			// the instance data dir itself: on the first start config.dataDir still holds the io-package default
+			dbPath: newPath,
 			logger: this.log,
 		});
 		await this.vectorDB.init();
-		//this.subscribeObjects("*");
-		this.subscribeStates("chat.prompt");
 		this.subscribeForeignObjects("*");
 		this.log.info(`[Kiwi Adapter] register Object Change Listener`);
-		this.setState("info.connection", { val: true, ack: true });
-		// e.g. after switching the provider, the new store is empty: index what is missing in the background
-		this.indexMissingDescriptions().catch((e) =>
-			this.log.error(`[Kiwi Adapter] Re-indexing descriptions failed: ${e.message}`),
-		);
+		this.setState("info.connection", { val: hasKey, ack: true });
+		// the full-text store is cheap to build: rebuild it, so changes made while a key was set are not missed
+		if (typeof this.vectorDB.clear === "function") {
+			this.vectorDB.clear();
+		}
+		// only the active store follows object changes: after switching the provider or removing/entering the key,
+		// bring it in line with the current descriptions in the background
+		this.syncIndex().catch((e) => this.log.error(`[Kiwi Adapter] Syncing the search index failed: ${e.message}`));
+		if (!hasKey) {
+			return;
+		}
+		this.subscribeStates("chat.prompt");
 		this.chatbot = new Chatbot({
 			provider,
 			apiKey: this.config.apiKey,
@@ -103,7 +111,8 @@ class McpServer extends utils.Adapter {
 			temperature: this.config.temperature ?? 0.7,
 			adapter: this,
 			logger: this.log,
-			dbPath: this.config.dataDir,
+			// the instance data dir itself: on the first start config.dataDir still holds the io-package default
+			dbPath: newPath,
 		});
 		// Initialize
 		await this.chatbot.init();
@@ -139,26 +148,27 @@ class McpServer extends utils.Adapter {
 		}
 	}
 	/**
-	 * Adds all described states that are not yet in the vector store of the active provider.
+	 * Brings the search store of the active provider in line with the current descriptions: removes states that are
+	 * no longer described and (re-)indexes states that are missing or whose description changed. Only these cost
+	 * embedding API calls.
 	 */
-	async indexMissingDescriptions() {
-		let indexed = 0;
+	async syncIndex() {
+		const described = new Map();
 		for (const [id, entry] of this._indexedObjects) {
-			if (!entry.enabled || !entry.description || entry.type !== "state" || this.vectorDB.has(id)) {
-				continue;
-			}
-			try {
-				const obj = await this.getForeignObjectAsync(id);
-				if (obj) {
-					await this.vectorDB.write(id, entry.description, obj);
-					indexed++;
-				}
-			} catch (e) {
-				this.log.warn(`[Kiwi Adapter] Could not index ${id}: ${e.message}`);
+			if (entry.enabled && entry.description && entry.type === "state") {
+				described.set(id, entry.description);
 			}
 		}
-		if (indexed) {
-			this.log.info(`[Kiwi Adapter] Indexed ${indexed} described state(s) missing in the vector store.`);
+		const { indexed, removed } = await syncSearchIndex({
+			store: this.vectorDB,
+			described,
+			getObject: (id) => this.getForeignObjectAsync(id),
+			logger: this.log,
+		});
+		if (indexed || removed) {
+			this.log.info(
+				`[Kiwi Adapter] Search index synced: ${indexed} state(s) indexed, ${removed} no longer described state(s) removed.`,
+			);
 		}
 	}
 

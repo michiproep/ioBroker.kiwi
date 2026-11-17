@@ -19,7 +19,7 @@ and semantic search over your states.
 - 64-bit system (x64 or arm64; Linux, Windows or macOS). 32-bit ARM (for example Raspberry Pi OS 32-bit) is not
   supported, because the native module `sqlite-vec` has no build for it.
 - An API key, see [AI and vector store integration status](#ai-and-vector-store-integration-status). Without a key the
-  adapter starts, but semantic search and the chat bot are disabled.
+  MCP server works, the chat bot is disabled and the state search falls back to a full-text search (no embeddings).
 
 ## Connecting
 
@@ -103,8 +103,11 @@ the integrated chat bot **and** for the embeddings of the semantic search.
 | Vector store | `openai_vector_store.sqlite` in the instance data dir | `vector_store.sqlite` in the instance data dir |
 
 The model dropdown lists the models of the selected provider (enter the key first). Leave it empty to use the default.
-Each provider has its own vector store file. After switching the provider, the adapter adds all described states that
-are missing in the new store on startup, so nothing has to be deleted by hand.
+Each provider has its own vector store file. Only the store in use follows changes of the descriptions. On startup
+the adapter brings it in line with the current descriptions: it removes states that are no longer described and
+indexes states that are missing or whose description changed. Only these cost embedding API calls. So nothing has to
+be deleted by hand after switching the provider or removing and entering the API key again. After switching to a
+provider whose store is still empty, all described states are embedded once, one API call per state.
 
 Overview of what is active and what is only prepared:
 
@@ -113,12 +116,21 @@ Overview of what is active and what is only prepared:
 | MCP server (HTTP, streamable)                         | `lib/mcp-web.mjs`, served by the **web adapter** at `/kiwi/<instance>/mcp`                                                                                | **active**                                                                                                                                                                                                                                          |
 | Integrated chat bot (`chat.prompt` / `chat.response`) | `lib/chatbot.mjs` + `lib/chat-engines.mjs`: OpenAI (function calling) or Gemini (`mcpToTool`), tools passed through an in-process MCP client              | **active**                                                                                                                                                                                                                                          |
 | Semantic state search                                 | OpenAI or Gemini embeddings + SQLite with `sqlite-vec` (`lib/openai-sqlite-vectorize.mjs`, `lib/sqlite-vectorize.mjs`, selected in `lib/ai-provider.mjs`) | **active**                                                                                                                                                                                                                                          |
+| Full-text state search (no API key)                   | SQLite FTS5 with trigram tokenizer, bm25 ranking (`lib/sqlite-fulltext.mjs`, selected in `lib/ai-provider.mjs` when no key is set)                        | **active**                                                                                                                                                                                                                                          |
 | Object search                                         | MongoDB-style queries over all ioBroker objects with `mingo` (`mingoSearch` tool, also used as filter for semantic search results)                        | **active**                                                                                                                                                                                                                                          |
 | OpenAI embeddings + Postgres                          | `pgvector` table `iobroker_vector_store` (`lib/openai-postgres-vectorize.mjs`)                                                                            | prepared, not used: never instantiated, no admin settings, connection string only via constructor option (hard-coded default `postgres://homeserver1:5432/postgres`). The ivfflat index cannot be created for 3072 dimensions (pgvector limit 2000) |
 | Web chat UI                                           | `lib/public/` (`/kiwi/<instance>/index.html`)                                                                                                             | prepared, not functional: the page sends messages over socket.io but nothing in the adapter answers them                                                                                                                                            |
 
 Using an external MCP client (Claude Desktop, VS Code, …) works with either provider; the provider is then only used
 for the semantic search embeddings.
+
+**Without an API key** the state search (`searchIobrokerStates`) uses a full-text search over description, name and id
+of the described states (SQLite FTS5, `lib/sqlite-fulltext.mjs`, file `fulltext_store.sqlite`). It needs no AI service
+and no API calls, but it only matches words, not meaning: words of at least 3 characters, also inside longer words
+(`lampe` finds `Wohnzimmerlampe`), independent of case and umlaut spelling (`kueche`, `kuche` and `Küche`). Synonyms
+and other languages are not found, so the MCP client should search with several keywords in the language of the
+descriptions. `distance` in the results is then the bm25 rank (lower is better). The adapter rebuilds this store on
+every start. When a key is entered later, the vector store of the provider is synced on the next start.
 
 ## MCP Tools
 
@@ -189,6 +201,12 @@ console.log(Buffer.from("username:password").toString("base64"))
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+- (michiproep) **Search without API key:** the state search falls back to a full-text search over description, name and id (no embeddings, no AI service needed); the chat bot still needs a key
+- (michiproep) the search index is synced with the current descriptions on startup: after switching the provider or the API key, states whose description was changed or removed in the meantime no longer show up with their old text
+
 ### 0.6.2 (2026-11-16)
 
 - (michiproep) MCP endpoint: parallel tool calls no longer fail with "500 Internal server error" and no longer cancel each other
