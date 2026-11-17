@@ -78,6 +78,7 @@ tests.integration(path.join(__dirname, ".."), {
 					expect((await store.find("garagentor")).map((r) => r.id)).to.deep.equal(["javascript.0.test.door"]);
 
 					// description removed while running: no longer found
+					/** @type {any} */
 					const lamp = describedState("Wohnzimmerlampe", "Deckenlampe im Wohnzimmer");
 					lamp.common.custom = { "kiwi.0": null };
 					await harness.objects.setObjectAsync("javascript.0.test.lamp", lamp);
