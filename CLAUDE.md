@@ -44,7 +44,9 @@ Gotchas:
 
 - The vector DB is opened up to three times on the same SQLite file (adapter, chatbot API, web extension). WAL mode is on.
 - The SQLite vector table dimension is fixed at creation. Changing the embedding model _within_ a provider requires
-  deleting that provider's `<iobroker-data>/kiwi.X/*.sqlite`; on startup `indexMissingDescriptions()` re-indexes.
+  deleting that provider's `<iobroker-data>/kiwi.X/*.sqlite`; on startup `syncIndex()` re-indexes.
+- Only the active store follows object changes. `syncIndex()` in `adapter.mjs` brings it in line on startup
+  (removes undescribed states, re-indexes missing or changed descriptions), so switching the provider or the key is safe.
 - The web extension reads kiwi's instance object itself, so `apiKey` arrives encrypted there and is decrypted with
   `adapter.decrypt` (see `decryptIfNeeded` in `lib/mcp-web.mjs`).
 - Live OpenAI tests in `lib/ai-provider.test.js` run only with `OPENAI_API_KEY` (env or `.env`, which is git-ignored).

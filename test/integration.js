@@ -76,6 +76,13 @@ tests.integration(path.join(__dirname, ".."), {
 				try {
 					expect((await store.find("lampe")).map((r) => r.id)).to.deep.equal(["javascript.0.test.lamp"]);
 					expect((await store.find("garagentor")).map((r) => r.id)).to.deep.equal(["javascript.0.test.door"]);
+
+					// description removed while running: no longer found
+					const lamp = describedState("Wohnzimmerlampe", "Deckenlampe im Wohnzimmer");
+					lamp.common.custom = { "kiwi.0": null };
+					await harness.objects.setObjectAsync("javascript.0.test.lamp", lamp);
+					await new Promise((resolve) => setTimeout(resolve, 3000));
+					expect(await store.find("lampe")).to.deep.equal([]);
 				} finally {
 					store.close();
 				}

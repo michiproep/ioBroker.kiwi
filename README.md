@@ -103,8 +103,11 @@ the integrated chat bot **and** for the embeddings of the semantic search.
 | Vector store | `openai_vector_store.sqlite` in the instance data dir | `vector_store.sqlite` in the instance data dir |
 
 The model dropdown lists the models of the selected provider (enter the key first). Leave it empty to use the default.
-Each provider has its own vector store file. After switching the provider, the adapter adds all described states that
-are missing in the new store on startup, so nothing has to be deleted by hand.
+Each provider has its own vector store file. Only the store in use follows changes of the descriptions. On startup
+the adapter brings it in line with the current descriptions: it removes states that are no longer described and
+indexes states that are missing or whose description changed. Only these cost embedding API calls. So nothing has to
+be deleted by hand after switching the provider or removing and entering the API key again. After switching to a
+provider whose store is still empty, all described states are embedded once, one API call per state.
 
 Overview of what is active and what is only prepared:
 
@@ -127,7 +130,7 @@ and no API calls, but it only matches words, not meaning: words of at least 3 ch
 (`lampe` finds `Wohnzimmerlampe`), independent of case and umlaut spelling (`kueche`, `kuche` and `Küche`). Synonyms
 and other languages are not found, so the MCP client should search with several keywords in the language of the
 descriptions. `distance` in the results is then the bm25 rank (lower is better). The adapter rebuilds this store on
-every start. When a key is entered later, the vector store of the provider is filled on the next start.
+every start. When a key is entered later, the vector store of the provider is synced on the next start.
 
 ## MCP Tools
 
@@ -202,6 +205,7 @@ console.log(Buffer.from("username:password").toString("base64"))
 ### **WORK IN PROGRESS**
 
 - (michiproep) **Search without API key:** the state search falls back to a full-text search over description, name and id (no embeddings, no AI service needed); the chat bot still needs a key
+- (michiproep) the search index is synced with the current descriptions on startup: after switching the provider or the API key, states whose description was changed or removed in the meantime no longer show up with their old text
 
 ### 0.6.2 (2026-11-16)
 

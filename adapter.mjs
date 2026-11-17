@@ -1,4 +1,5 @@
 import { Chatbot } from "./lib/chatbot.mjs";
+import { syncSearchIndex } from "./lib/search-index.mjs";
 import { PROVIDERS, createVectorDB, listChatModels, normalizeProvider, resolveModel } from "./lib/ai-provider.mjs";
 // eslint-disable-next-line
 import * as utils from "@iobroker/adapter-core";
@@ -95,10 +96,9 @@ class McpServer extends utils.Adapter {
 		if (typeof this.vectorDB.clear === "function") {
 			this.vectorDB.clear();
 		}
-		// e.g. after switching the provider, the new store is empty: index what is missing in the background
-		this.indexMissingDescriptions().catch((e) =>
-			this.log.error(`[Kiwi Adapter] Re-indexing descriptions failed: ${e.message}`),
-		);
+		// only the active store follows object changes: after switching the provider or removing/entering the key,
+		// bring it in line with the current descriptions in the background
+		this.syncIndex().catch((e) => this.log.error(`[Kiwi Adapter] Syncing the search index failed: ${e.message}`));
 		if (!hasKey) {
 			return;
 		}
@@ -148,26 +148,27 @@ class McpServer extends utils.Adapter {
 		}
 	}
 	/**
-	 * Adds all described states that are not yet in the vector store of the active provider.
+	 * Brings the search store of the active provider in line with the current descriptions: removes states that are
+	 * no longer described and (re-)indexes states that are missing or whose description changed. Only these cost
+	 * embedding API calls.
 	 */
-	async indexMissingDescriptions() {
-		let indexed = 0;
+	async syncIndex() {
+		const described = new Map();
 		for (const [id, entry] of this._indexedObjects) {
-			if (!entry.enabled || !entry.description || entry.type !== "state" || this.vectorDB.has(id)) {
-				continue;
-			}
-			try {
-				const obj = await this.getForeignObjectAsync(id);
-				if (obj) {
-					await this.vectorDB.write(id, entry.description, obj);
-					indexed++;
-				}
-			} catch (e) {
-				this.log.warn(`[Kiwi Adapter] Could not index ${id}: ${e.message}`);
+			if (entry.enabled && entry.description && entry.type === "state") {
+				described.set(id, entry.description);
 			}
 		}
-		if (indexed) {
-			this.log.info(`[Kiwi Adapter] Indexed ${indexed} described state(s) missing in the vector store.`);
+		const { indexed, removed } = await syncSearchIndex({
+			store: this.vectorDB,
+			described,
+			getObject: (id) => this.getForeignObjectAsync(id),
+			logger: this.log,
+		});
+		if (indexed || removed) {
+			this.log.info(
+				`[Kiwi Adapter] Search index synced: ${indexed} state(s) indexed, ${removed} no longer described state(s) removed.`,
+			);
 		}
 	}
 
